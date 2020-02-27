@@ -23,4 +23,16 @@ public class ParticipantView extends RecyclerView.ViewHolder {
         this.participantName = itemView.findViewById(R.id.participant_name);
         this.participantLayout = itemView.findViewById(R.id.participant_layout);
     }
+
+    public void setImage(int image) {
+        this.image.setImageResource(image);
+    }
+
+    public void setParticipantName(String participantName) {
+        this.participantName.setText(participantName);
+    }
+
+    public void setParticipantLayout(RelativeLayout participantLayout) {
+        this.participantLayout = participantLayout;
+    }
 }
