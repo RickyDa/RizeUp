@@ -15,6 +15,8 @@ import android.view.View;
 
 import com.rizeup.Queue.QueueActivity;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CAMERA_CODE = 100;
@@ -24,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        deleteUsers();
+        registerUser();
         findViewById(R.id.btnGetInQ).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,16 +44,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void deleteUsers() {
+        // TODO:
+    }
+
+    private void registerUser() {
+        // TODO:
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Intent startQ = new Intent(getApplicationContext(), QueueActivity.class);
-        if (requestCode == REQUEST_CAMERA_CODE && data != null) {
-            Bitmap image = (Bitmap) data.getExtras().get(IMAGE_DATA);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CAMERA_CODE && resultCode == RESULT_OK) {
+            Intent startQ = new Intent(getApplicationContext(), QueueActivity.class);
+            Bitmap image = null;
+
+            if (data != null)
+                image = (Bitmap) Objects.requireNonNull(data.getExtras()).get(IMAGE_DATA);
+            //TODO:
+            //  -implement registerUsers() for testing
+            //  -implement deleteUsers() for testing
+            //  -FLOW (of this function)
+            //      - after image capture upload the current user
+            //        to firebase and add the user to the Q
+            //      - when photo the is in uploading state show progress bar.
+            //      - when upload is copleted start Queue.QueueActivity
             startQ.putExtra(IMAGE_DATA , image);
+            startActivity(startQ);
         }
-        else
-            super.onActivityResult(requestCode, resultCode, data);
-        startActivity(startQ);
+
+
     }
 
 }
