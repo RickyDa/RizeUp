@@ -81,7 +81,7 @@ public class UserFactory {
                             Toast.makeText(mContext, "Upload Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
-            while (mUploadTask.isInProgress()) ;
+            while (mUploadTask.isInProgress());
         }
     }
 

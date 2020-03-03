@@ -1,8 +1,9 @@
 package com.rizeup;
 
+import java.io.Serializable;
 import java.net.URI;
 
-public class User {
+public class User implements Serializable {
 
     private String name;
     private String email;
