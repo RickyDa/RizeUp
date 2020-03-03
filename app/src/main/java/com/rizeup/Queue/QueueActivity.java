@@ -1,84 +1,79 @@
 package com.rizeup.Queue;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rizeup.R;
+import com.rizeup.User;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class QueueActivity extends AppCompatActivity {
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("The_Queue");
 
+    private DatabaseReference mDataRef;
     private RecyclerView queue;
     private RecyclerViewAdapter adapter;
-    private ArrayList<Integer> imagesToLoad;
-    private ArrayList<String> names;
+    private ArrayList<User> participants;
 
     private static final String TAG = "Queue.QueueActivity";
+
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_queue);
-        imagesToLoad = new ArrayList<>();
-        names = new ArrayList<>();
+        this.participants = new ArrayList<>();
         this.queue = findViewById(R.id.queue_recycler_view);
-//        myRef.setValue("Hello, World!");
-//
-//
-//        // Read from the database
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                String value = dataSnapshot.getValue(String.class);
-//                Log.d(TAG, "Value is: " + value);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Log.d(TAG, "Failed to read value.", error.toException());
-//            }
-//        });
-        initParticipants();
-    }
+        this.queue.setHasFixedSize(true);
+        this.queue.setLayoutManager(new LinearLayoutManager(this));
+        this.mDataRef = FirebaseDatabase.getInstance().getReference("Users");
 
-    private void initParticipants(){
-        Log.d(TAG, "initParticipants: preparing Recycler View");
-        names.add("user1");
-        names.add("user2");
-        names.add("user3");
-        names.add("user4");
-        names.add("user5");
-        names.add("user6");
+        mDataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    participants.add(user);
+                }
+                adapter = new RecyclerViewAdapter(getApplicationContext(), participants);
+                queue.setAdapter(adapter);
+            }
 
-        imagesToLoad.add(R.drawable.user_one);
-        imagesToLoad.add(R.drawable.user_two);
-        imagesToLoad.add(R.drawable.user_three);
-        imagesToLoad.add(R.drawable.user_four);
-        imagesToLoad.add(R.drawable.user_five);
-        imagesToLoad.add(R.drawable.user_six);
-        initRecyclerView();
-    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
-    private void initRecyclerView(){
-        this.adapter = new RecyclerViewAdapter(this,names,imagesToLoad);
-        queue.setAdapter(this.adapter);
-        queue.setLayoutManager(new LinearLayoutManager(this));
+        itemTouchHelperCallback =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                participants.remove(viewHolder.getAdapterPosition());
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(queue);
     }
 }

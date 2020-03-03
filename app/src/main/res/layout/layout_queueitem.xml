@@ -4,31 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
-    android:id="@+id/participant_layout">
+    android:id="@+id/queue_layout">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/participant_image"
+        android:id="@+id/queue_image"
         android:layout_width="87dp"
         android:layout_height="87dp"
         android:src='@mipmap/ic_launcher_round'/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/participant_image"
+        android:layout_toEndOf="@id/queue_image"
         android:padding="20dp">
+
         <TextView
-            android:id="@+id/participant_name"
+            android:id="@+id/queue_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="Queue Name"
             android:textColor="#000"
             android:textSize="20sp"/>
 
         <TextView
+            android:id="@+id/queue_ref"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description"
-            android:layout_below="@id/participant_name"/>
+            android:text="queue ID"
+            android:layout_below="@id/queue_name"/>
     </RelativeLayout>
 
 </RelativeLayout>
