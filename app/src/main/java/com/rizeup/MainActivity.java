@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,52 +17,41 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.rizeup.Queue.QueueActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
 
-//TODO:
-//  -FLOW (of this function)
-//      - after image capture upload the current user
-//        to firebase and add the user to the Q
-//      - when photo the is in uploading state show progress bar.
-//      - when upload is completed start Queue.QueueActivity
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CAMERA_CODE = 100;
-    private static final String IMAGE_DATA = "data";
     private StorageTask mUploadTask;
     private DatabaseReference mDataRef;
     private StorageReference mStorageRef;
+    private ProgressBar progressBar;
+
+    private String myPic;
+    private User theUser;
 
     private UserFactory uf;
-    private String myPic;
-
-    private User theUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
         this.mDataRef = FirebaseDatabase.getInstance().getReference("Users");
         this.mStorageRef = FirebaseStorage.getInstance().getReference("User-Images");
         this.mUploadTask = null;
-        boolean flag = isStoragePermissionGranted();
-
+        isStoragePermissionGranted();
+        this.progressBar = findViewById(R.id.progressBar);
         // ######################### FOR TESTING #########################
 //        uf = new UserFactory(getApplicationContext());
-//        uf.deleteUsers();
+////        uf.deleteUsers();
 //        uf.addUsers();
 
         this.theUser = new User("Ricky", "Rickyyy44@gmail.com", "");
@@ -85,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnGetInQ).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
+//                Intent startQ = new Intent(getApplicationContext(), QueueActivity.class);
+//                startActivity(startQ);
+                if (mUploadTask != null && mUploadTask.isInProgress())
+                    Toast.makeText(getApplicationContext(), "Queueing is in Progress", Toast.LENGTH_LONG).show();
+                else
+                    dispatchTakePictureIntent();
             }
         });
     }
@@ -128,39 +121,47 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CAMERA_CODE && resultCode == RESULT_OK) {
             Uri uri = Uri.fromFile(new File(myPic));
 
-            StorageReference stoRef = mStorageRef.child(uri.getLastPathSegment());
+            final StorageReference stoRef = mStorageRef.child(uri.getLastPathSegment());
             this.mUploadTask = stoRef.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(getApplicationContext(), "Uploaded Successfully", Toast.LENGTH_LONG).show();
-                            theUser.setImageUrl(taskSnapshot.getUploadSessionUri().toString());
-                            String uploadId = mDataRef.push().getKey();
-                            mDataRef.child(uploadId).setValue(theUser);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setProgress(0);
+                                }
+                            }, 500);
+//                            Toast.makeText(getApplicationContext(), "Uploaded Successfully", Toast.LENGTH_LONG).show();
+                            stoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    theUser.setImageUrl(uri.toString());
+                                    String uploadId = mDataRef.push().getKey();
+                                    mDataRef.child(uploadId).setValue(theUser);
+                                    Intent startQ = new Intent(getApplicationContext(), QueueActivity.class);
+                                    startActivity(startQ);
+                                }
+                            });
                         }
-
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Upload Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Queueing Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressBar.setProgress((int) progress);
                         }
                     });
 
             Bitmap bit = BitmapFactory.decodeFile(myPic);
             ImageView v = findViewById(R.id.imageView);
             v.setImageBitmap(bit);
-            // TODO: DELAY Progress...TO FIX
-            while(mUploadTask.isInProgress());
-
-            Intent startQ = new Intent(getApplicationContext(), QueueActivity.class);
-//            Bitmap image = null;
-//
-//            if (data != null)
-//                image = (Bitmap) Objects.requireNonNull(data.getExtras()).get(IMAGE_DATA);
-
-//            startQ.putExtra(IMAGE_DATA, image);
-            startActivity(startQ);
         }
 
 

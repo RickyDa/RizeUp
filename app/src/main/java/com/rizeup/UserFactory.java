@@ -53,16 +53,23 @@ public class UserFactory {
             Uri image = Uri.fromFile(new File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                             + images[i]));
-            StorageReference stoRef = mStorageRef.child(images[i]);
+            final StorageReference stoRef = mStorageRef.child(images[i]);
             final int currIndex = i;
             this.mUploadTask = stoRef.putFile(image)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            User user = new User(names[currIndex], names[currIndex] + "@gmail.com"
-                                    , taskSnapshot.getUploadSessionUri().toString());
-                            String uploadId = mDataRef.push().getKey();
-                            mDataRef.child(uploadId).setValue(user);
+
+                            stoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String url = uri.toString();
+                                    User user = new User(names[currIndex], names[currIndex] + "@gmail.com",url);
+
+                                    String uploadId = mDataRef.push().getKey();
+                                    mDataRef.child(uploadId).setValue(user);
+                                }
+                            });
                             if (currIndex == images.length - 1)
                                 Toast.makeText(mContext, "Upload completed", Toast.LENGTH_SHORT).show();
                         }
