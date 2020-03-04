@@ -12,38 +12,35 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.rizeup.CreateQueue.CreateQueueActivity;
 import com.rizeup.FindQueue.FindQueueActivity;
+import com.rizeup.MainMenu.MainMenu;
 
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    public static final String USER_EXTRA = "user";
-    private User theUser;
+    private FirebaseAuth mAuth;
+    private Intent login, homePage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         isStoragePermissionGranted();
-        this.theUser = new User("Ricky","Rickyyy44@gmail.com","");
 
-        findViewById(R.id.findBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent findQueue = new Intent(getApplicationContext(), FindQueueActivity.class);
-                startActivity(findQueue);
-            }
-        });
+        mAuth = FirebaseAuth.getInstance();
+        login = new Intent(this, LoginActivity.class);
+        homePage = new Intent(this, MainMenu.class);
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(login);
+        } else {
+            startActivity(homePage);
+        }
 
-        findViewById(R.id.createBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createQueue = new Intent(getApplicationContext(), CreateQueueActivity.class);
-                createQueue.putExtra(USER_EXTRA,theUser);
-                startActivity(createQueue);
-            }
-        });
     }
+
+
 
 
     public boolean isStoragePermissionGranted() {
