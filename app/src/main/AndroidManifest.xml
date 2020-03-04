@@ -16,8 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateQueue.CreateQueueActivity"></activity>
+        <activity android:name=".MainMenu.MainMenu"></activity>
+        <activity android:name=".CreateQueue.CreateQueueActivity" />
         <activity android:name=".FindQueue.FindQueueActivity" />
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".SignUpActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -12,7 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rizeup.R;
 import com.rizeup.User;
 
-import static com.rizeup.MainActivity.USER_EXTRA;
+import static com.rizeup.MainMenu.MainMenu.USER_EXTRA;
+
 
 public class CreateQueueActivity extends AppCompatActivity {
     private static final String TAG = "CreateQueueActivity";
