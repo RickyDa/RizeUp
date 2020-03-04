@@ -10,11 +10,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.rizeup.CreateQueue.CreateQueueActivity;
-import com.rizeup.FindQueue.FindQueueActivity;
 import com.rizeup.MainMenu.MainMenu;
 
 
