@@ -16,7 +16,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.rizeup.MainMenu.MainMenu;
-import com.rizeup.R;
 
 public class SignUpActivity extends AppCompatActivity {
 
