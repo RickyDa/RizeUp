@@ -26,11 +26,11 @@
             android:text="Find Queue" />
 
         <Button
-            android:id="@+id/createBtn"
+            android:id="@+id/manageBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="Create Queue" />
+            android:text="Manage Queue" />
 
     </RelativeLayout>
 

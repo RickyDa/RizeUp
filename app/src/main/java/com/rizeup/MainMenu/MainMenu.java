@@ -1,5 +1,6 @@
 package com.rizeup.MainMenu;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,35 +10,40 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rizeup.CreateQueue.CreateQueueActivity;
 import com.rizeup.FindQueue.FindQueueActivity;
+import com.rizeup.ManageQueue.ManageActivity;
 import com.rizeup.R;
-import com.rizeup.utils.User;
+import com.rizeup.utils.FirebaseReferences;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainMenu extends AppCompatActivity {
     private static final String TAG = "MainMenu.MainMenuActivity";
-    public static final String USER_EXTRA = "user";
-    private User theUser;
-    private FirebaseUser user;
+
+    private FirebaseUser theUser;
     private FirebaseAuth mAuth;
+    private DatabaseReference queue;
     private CircleImageView profileImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        this.theUser = new User("Ricky","Rickyyy44@gmail.com","");
 
         this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        this.theUser = mAuth.getCurrentUser();
+        this.queue = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
         this.profileImg = findViewById(R.id.userProfileImage);
 
-        if(user.getPhotoUrl() != null) {
-            Glide.with(this).load(user.getPhotoUrl()).into(this.profileImg);
-        }
-        else {
+        if (theUser.getPhotoUrl() != null) {
+            Glide.with(this).load(theUser.getPhotoUrl()).into(this.profileImg);
+        } else {
             Glide.with(this).load(R.drawable.defaultimage).into(this.profileImg);
             // TODO set listener to Profile pick for image capture
         }
@@ -50,12 +56,26 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.createBtn).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.manageBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent createQueue = new Intent(getApplicationContext(), CreateQueueActivity.class);
-                createQueue.putExtra(USER_EXTRA,theUser);
-                startActivity(createQueue);
+
+                queue.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(theUser.getUid())) {
+                            startActivity(new Intent(getApplicationContext(), ManageActivity.class));
+                        } else {
+                            startActivity(new Intent(getApplicationContext(), CreateQueueActivity.class));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         });
     }

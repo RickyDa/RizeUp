@@ -136,8 +136,10 @@ public class SignUpActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && data != null) {
+
             if (requestCode == RequestCodes.PICK_IMAGE_REQUEST && data.getData() != null) {
                 this.imageUri = data.getData();
+
             }
             Glide.with(this).load(this.imageUri).into(this.profileImg);
         }
@@ -181,7 +183,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void uploadUserImage() {
         if(this.imageUri != null) {
-            final StorageReference stoRef = mStorage.child(this.imageUri.getLastPathSegment());
+            final StorageReference stoRef = mStorage.child(mAuth.getUid()+"."+FileHandler.getFileExtension(getContentResolver(),this.imageUri));
             this.mUploadTask = stoRef.putFile(this.imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
