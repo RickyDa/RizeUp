@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.rizeup.CreateQueue.RizeUpQueue;
 import com.rizeup.R;
-import com.rizeup.User;
+import com.rizeup.utils.User;
 
 import java.util.ArrayList;
 

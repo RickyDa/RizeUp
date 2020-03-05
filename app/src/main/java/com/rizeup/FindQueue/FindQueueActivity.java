@@ -33,8 +33,8 @@ import com.google.firebase.storage.UploadTask;
 import com.rizeup.CreateQueue.RizeUpQueue;
 import com.rizeup.Queue.QueueActivity;
 import com.rizeup.R;
-import com.rizeup.User;
-import com.rizeup.UserFactory;
+import com.rizeup.utils.User;
+import com.rizeup.utils.UserFactory;
 
 import java.io.File;
 import java.io.IOException;

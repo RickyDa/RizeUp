@@ -1,4 +1,4 @@
-package com.rizeup;
+package com.rizeup.utils;
 
 
 import android.content.Context;

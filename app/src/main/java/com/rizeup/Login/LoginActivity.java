@@ -1,4 +1,4 @@
-package com.rizeup;
+package com.rizeup.Login;
 
 
 import androidx.annotation.NonNull;
@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rizeup.MainMenu.MainMenu;
+import com.rizeup.R;
+import com.rizeup.SignUp.SignUpActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

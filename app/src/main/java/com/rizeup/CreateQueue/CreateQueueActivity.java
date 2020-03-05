@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rizeup.R;
-import com.rizeup.User;
+import com.rizeup.utils.User;
 
 import static com.rizeup.MainMenu.MainMenu.USER_EXTRA;
 

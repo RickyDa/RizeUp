@@ -1,6 +1,6 @@
 package com.rizeup.CreateQueue;
 
-import com.rizeup.User;
+import com.rizeup.utils.User;
 
 public class RizeUpQueue {
 

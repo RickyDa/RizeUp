@@ -9,7 +9,7 @@ import android.view.View;
 import com.rizeup.CreateQueue.CreateQueueActivity;
 import com.rizeup.FindQueue.FindQueueActivity;
 import com.rizeup.R;
-import com.rizeup.User;
+import com.rizeup.utils.User;
 
 public class MainMenu extends AppCompatActivity {
     private static final String TAG = "MainMenu.MainMenuActivity";
