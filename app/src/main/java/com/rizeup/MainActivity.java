@@ -25,26 +25,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        isStoragePermissionGranted();
 
-        mAuth = FirebaseAuth.getInstance();
-        login = new Intent(this, LoginActivity.class);
-        homePage = new Intent(this, MainMenu.class);
-        if (mAuth.getCurrentUser() == null) {
-            startActivity(login);
-        } else {
-            startActivity(homePage);
+        if (isStoragePermissionGranted()) {
+            start();
         }
 
     }
 
+    private void start() {
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
 
+        } else {
+            startActivity(new Intent(this, MainMenu.class));
+
+        }
+    }
 
 
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
+                    == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.CAMERA)
+                            == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "Permission is granted");
                 return true;
             } else {
@@ -62,4 +69,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        boolean flag = true;
+        if (requestCode == 1 && grantResults.length > 0) {
+            for (int res : grantResults) {
+                flag = flag && (res == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+        if (flag) {
+            start();
+        }
+    }
 }
+

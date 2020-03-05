@@ -8,6 +8,7 @@
     tools:context=".MainMenu.MainMenu"
     android:padding="30dp">
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userProfileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src='@mipmap/ic_launcher_round'

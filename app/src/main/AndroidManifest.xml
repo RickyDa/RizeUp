@@ -20,7 +20,7 @@
         <activity android:name=".CreateQueue.CreateQueueActivity" />
         <activity android:name=".FindQueue.FindQueueActivity" />
         <activity android:name=".Login.LoginActivity"/>
-        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".SignUp.SignUpActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

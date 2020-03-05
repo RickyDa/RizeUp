@@ -1,74 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:context=".SignUp.SignUpActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/defaultimage" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/captureBtn"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_camera_alt_black_24dp"
+                android:text="capture"
+                />
+
+            <Button
+                android:id="@+id/uploadBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_archive_black_24dp"
+                android:text="upload" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_margin="10dp"
         android:hint="Email"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
         android:inputType="textEmailAddress"
+        android:padding="15dp"
         android:textSize="15sp" />
 
     <EditText
         android:id="@+id/et_full_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Full Name"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="15dp"
         android:layout_below="@id/et_email"
+        android:layout_margin="10dp"
+        android:hint="Full Name"
         android:inputType="textPersonName"
+        android:padding="15dp"
         android:textSize="15sp" />
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Password"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:padding="15dp"
-        android:inputType="textPassword"
         android:layout_below="@id/et_full_name"
+        android:layout_margin="10dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="15dp"
         android:textSize="15sp" />
 
     <EditText
         android:id="@+id/et_retype_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Retype Password"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:padding="15dp"
-        android:inputType="textPassword"
         android:layout_below="@id/et_password"
+        android:layout_margin="10dp"
+        android:hint="Retype Password"
+        android:inputType="textPassword"
+        android:padding="15dp"
         android:textSize="15sp" />
 
     <Button
         android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/et_retype_password"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="30dp"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/et_retype_password"
-        android:textColor="@android:color/black"
-        android:text="Register"/>
+        android:text="Register"
+        android:textColor="@android:color/black" />
 
-</RelativeLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        />
+
+</LinearLayout>
