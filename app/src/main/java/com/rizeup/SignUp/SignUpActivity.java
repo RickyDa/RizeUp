@@ -2,16 +2,10 @@ package com.rizeup.SignUp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -33,22 +27,15 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.rizeup.MainMenu.MainMenu;
-import com.rizeup.Queue.QueueActivity;
+import com.rizeup.RiZeUpActivity;
 import com.rizeup.R;
 import com.rizeup.utils.FileHandler;
 import com.rizeup.utils.FirebaseReferences;
-import com.rizeup.utils.RequestCodes;
 
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends RiZeUpActivity {
 
     private static final String TAG = "SignUp.SignUpActivity";
 
@@ -59,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText email, fullName, password, rePassword;
     private CircleImageView profileImg;
     private ProgressBar progressBar;
-    private Uri imageUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,47 +76,27 @@ public class SignUpActivity extends AppCompatActivity {
         findViewById(R.id.captureBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openCamera();
+                if (checkCameraPermission()) {
+                    openCamera();
+                }else {
+                    requestPermission(CAMERA_CODE_REQUEST);
+                }
             }
         });
 
         findViewById(R.id.uploadBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                if (checkStoragePermission()) {
+                    openFileChooser();
+                }else{
+                    requestPermission(STORAGE_CODE_REQUEST);
+                }
+
             }
         });
     }
 
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, RequestCodes.PICK_IMAGE_REQUEST);
-    }
-
-
-    private void openCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = FileHandler.createImageFile(this);
-            } catch (IOException ex) {
-                Log.d(TAG, "openCamera() " + ex.getMessage());
-            }
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(
-                        this,
-                        "com.rizeup.fileprovider",
-                        photoFile);
-                this.imageUri = Uri.fromFile(photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, RequestCodes.CAMERA_CODE_REQUEST);
-            }
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -137,9 +104,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && data != null) {
 
-            if (requestCode == RequestCodes.PICK_IMAGE_REQUEST && data.getData() != null) {
+            if (requestCode == STORAGE_CODE_REQUEST && data.getData() != null) {
                 this.imageUri = data.getData();
-
             }
             Glide.with(this).load(this.imageUri).into(this.profileImg);
         }
@@ -182,8 +148,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void uploadUserImage() {
-        if(this.imageUri != null) {
-            final StorageReference stoRef = mStorage.child(mAuth.getUid()+"."+FileHandler.getFileExtension(getContentResolver(),this.imageUri));
+        if (this.imageUri != null) {
+            final StorageReference stoRef = mStorage.child(mAuth.getUid() + "." + FileHandler.getFileExtension(getContentResolver(), this.imageUri));
             this.mUploadTask = stoRef.putFile(this.imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -205,12 +171,11 @@ public class SignUpActivity extends AppCompatActivity {
                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                            if(progressBar.getVisibility() == View.INVISIBLE)
+                            if (progressBar.getVisibility() == View.INVISIBLE)
                                 progressBar.setVisibility(View.VISIBLE);
                         }
                     });
-        }
-        else {
+        } else {
             createDatabaseEntry("");
         }
     }
@@ -220,5 +185,4 @@ public class SignUpActivity extends AppCompatActivity {
         DatabaseReference child = mDatabase.child(mAuth.getCurrentUser().getUid());
         child.setValue(newUser);
     }
-
 }

@@ -2,14 +2,12 @@ package com.rizeup.CreateQueue;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,15 +26,16 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.rizeup.ManageQueue.ManageActivity;
+import com.rizeup.RiZeUpActivity;
 import com.rizeup.R;
 import com.rizeup.utils.FileHandler;
 import com.rizeup.utils.FirebaseReferences;
-import com.rizeup.utils.RequestCodes;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class CreateQueueActivity extends AppCompatActivity {
+public class CreateQueueActivity extends RiZeUpActivity {
     private static final String TAG = "CreateQueueActivity";
 
     private FirebaseUser theUser;
@@ -70,7 +69,10 @@ public class CreateQueueActivity extends AppCompatActivity {
                 if(mUploadTask != null && mUploadTask.isInProgress()){
                     Toast.makeText(getApplicationContext(), "Creation in progress", Toast.LENGTH_SHORT).show();
                 }else {
-                    openFileChooser();
+                    if(checkStoragePermission())
+                        openFileChooser();
+                    else
+                        requestPermission(STORAGE_CODE_REQUEST);
                 }
             }
         });
@@ -92,19 +94,11 @@ public class CreateQueueActivity extends AppCompatActivity {
         });
     }
 
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, RequestCodes.PICK_IMAGE_REQUEST);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == RequestCodes.PICK_IMAGE_REQUEST && data.getData() != null) {
+            if (requestCode == STORAGE_CODE_REQUEST && data.getData() != null) {
                 this.imageUri = data.getData();
             }
             Glide.with(this).load(this.imageUri).into(this.mQueueImage);
@@ -112,7 +106,6 @@ public class CreateQueueActivity extends AppCompatActivity {
     }
 
     private void uploadQueueImage(final String qKey) {
-
         final StorageReference stoRef = storageRef.child(qKey + "." + FileHandler.getFileExtension(getContentResolver(), this.imageUri));
         this.mUploadTask = stoRef.putFile(this.imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -155,7 +148,8 @@ public class CreateQueueActivity extends AppCompatActivity {
                         progressBar.setProgress(0);
                     }
                 },500);
-                // TODO: OPEN MANAGE INTENT
+                //start Manage activity
+                startActivity(new Intent(getApplicationContext(), ManageActivity.class));
                 finish();
             }
         });
