@@ -48,7 +48,7 @@ public class QueueActivity extends AppCompatActivity {
                     User user = snapshot.getValue(User.class);
                     participants.add(user);
                 }
-                adapter = new RecyclerViewAdapter(getApplicationContext(), participants);
+//                adapter = new RecyclerViewAdapter(getApplicationContext(), participants);
                 queue.setAdapter(adapter);
             }
 

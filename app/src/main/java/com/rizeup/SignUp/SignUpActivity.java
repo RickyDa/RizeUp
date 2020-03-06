@@ -64,7 +64,6 @@ public class SignUpActivity extends RiZeUpActivity {
         this.profileImg = findViewById(R.id.profileImg);
         this.progressBar = findViewById(R.id.progressBar);
         this.progressBar.setVisibility(View.INVISIBLE);
-        this.imageUri = null;
 
         findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +180,7 @@ public class SignUpActivity extends RiZeUpActivity {
     }
 
     private void createDatabaseEntry(String downloadUrl) {
-        RiZeUpUser newUser = new RiZeUpUser(mAuth.getCurrentUser().getDisplayName(), downloadUrl);
+        RiZeUpUser newUser = new RiZeUpUser(mAuth.getCurrentUser().getDisplayName(), downloadUrl, mAuth.getCurrentUser().getUid());
         DatabaseReference child = mDatabase.child(mAuth.getCurrentUser().getUid());
         child.setValue(newUser);
     }

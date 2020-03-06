@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.rizeup.R;
+import com.rizeup.SignUp.RiZeUpUser;
 import com.rizeup.utils.User;
 
 import java.util.ArrayList;
@@ -21,9 +23,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ParticipantView> {
 
     private Context mContext;
-    private ArrayList<User> participant;
+    private ArrayList<RiZeUpUser> participant;
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<User> participant) {
+    public RecyclerViewAdapter(Context mContext, ArrayList<RiZeUpUser> participant) {
         this.mContext = mContext;
         this.participant = participant;
 
@@ -40,8 +42,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // TODO: Complete this method after Firebase is connected
 
         holder.participantName.setText(participant.get(position).getName());
-        holder.participantDesc.setText(participant.get(position).getEmail());
-        Glide.with(mContext).asBitmap().load(participant.get(position).getImageUrl()).into(holder.image);
+        holder.participantNumber.setText(String.valueOf(position));
+        Glide.with(mContext).asBitmap().load(participant.get(position).getImageUri()).into(holder.image);
     }
 
     @Override
@@ -52,14 +54,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         CircleImageView image;
         TextView participantName;
-        TextView participantDesc;
-        RelativeLayout participantLayout;
+        TextView participantNumber;
+        LinearLayout participantLayout;
 
         ParticipantView(View itemView) {
             super(itemView);
             this.image = itemView.findViewById(R.id.participant_image);
             this.participantName = itemView.findViewById(R.id.participant_name);
-            this.participantDesc = itemView.findViewById(R.id.participant_desc);
+            this.participantNumber = itemView.findViewById(R.id.participant_number);
             this.participantLayout = itemView.findViewById(R.id.participant_layout);
         }
     }

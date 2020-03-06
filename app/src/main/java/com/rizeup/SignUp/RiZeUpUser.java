@@ -7,12 +7,16 @@ public class RiZeUpUser {
     private String name;
     private String imageUri;
 
+
+    private String uid;
+
     public RiZeUpUser() {
     }
 
-    public RiZeUpUser(String name, String imageUri) {
+    public RiZeUpUser(String name, String imageUri, String uid) {
         this.name = name;
         this.imageUri = imageUri;
+        this.uid = uid;
     }
 
     public String getName() {
@@ -21,5 +25,9 @@ public class RiZeUpUser {
 
     public String getImageUri() {
         return imageUri;
+    }
+
+    public String getUid() {
+        return uid;
     }
 }

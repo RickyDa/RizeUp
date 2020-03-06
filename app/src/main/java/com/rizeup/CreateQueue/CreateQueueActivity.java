@@ -29,8 +29,12 @@ import com.google.firebase.storage.UploadTask;
 import com.rizeup.ManageQueue.ManageActivity;
 import com.rizeup.RiZeUpActivity;
 import com.rizeup.R;
+import com.rizeup.SignUp.RiZeUpUser;
 import com.rizeup.utils.FileHandler;
 import com.rizeup.utils.FirebaseReferences;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -60,16 +64,15 @@ public class CreateQueueActivity extends RiZeUpActivity {
         this.mEditQueueName = findViewById(R.id.enter_q_name);
         this.mQueueImage = findViewById(R.id.queueImg);
         this.progressBar = findViewById(R.id.uploadProgressBar);
-        this.imageUri = null;
 
 
         findViewById(R.id.changeImgBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mUploadTask != null && mUploadTask.isInProgress()){
+                if (mUploadTask != null && mUploadTask.isInProgress()) {
                     Toast.makeText(getApplicationContext(), "Creation in progress", Toast.LENGTH_SHORT).show();
-                }else {
-                    if(checkStoragePermission())
+                } else {
+                    if (checkStoragePermission())
                         openFileChooser();
                     else
                         requestPermission(STORAGE_CODE_REQUEST);
@@ -80,9 +83,9 @@ public class CreateQueueActivity extends RiZeUpActivity {
         findViewById(R.id.createQBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mUploadTask != null && mUploadTask.isInProgress()){
+                if (mUploadTask != null && mUploadTask.isInProgress()) {
                     Toast.makeText(getApplicationContext(), "Creation in progress", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     if (mEditQueueName.getText().toString().trim().equals("")) {
                         Toast.makeText(getApplicationContext(), "***MUST ENTER QUEUE NAME***", Toast.LENGTH_SHORT).show();
                     } else {
@@ -92,6 +95,8 @@ public class CreateQueueActivity extends RiZeUpActivity {
                 }
             }
         });
+
+        getLastLocation();
     }
 
     @Override
@@ -127,15 +132,17 @@ public class CreateQueueActivity extends RiZeUpActivity {
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = 100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount();
-                        progressBar.setProgress((int)progress);
+                        double progress = 100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount();
+                        progressBar.setProgress((int) progress);
                     }
                 });
     }
 
     public void createQueue(String qKey, String imageDownLoadUrl) {
+        //TODO: DELETE
+        ArrayList<String> list = new ArrayList<>(Arrays.asList("4VvdIHOGo6Rgpx6krnKe8yWO4Nm2","YZZ69efH6afIspSsNWRkO4mPDwc2","hEgHL8ja5IXHzreH4ZNdt5P6Sy53"));
 
-        RizeUpQueue q = new RizeUpQueue(mEditQueueName.getText().toString(),theUser.getDisplayName(), theUser.getUid(), qKey, imageDownLoadUrl);
+        RizeUpQueue q = new RizeUpQueue(mEditQueueName.getText().toString(), theUser.getDisplayName(), theUser.getUid(), qKey, imageDownLoadUrl, lat, lng, list);
         DatabaseReference child = databaseRef.child(theUser.getUid());
         child.setValue(q).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -144,10 +151,10 @@ public class CreateQueueActivity extends RiZeUpActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "created", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Created", Toast.LENGTH_LONG).show();
                         progressBar.setProgress(0);
                     }
-                },500);
+                }, 500);
                 //start Manage activity
                 startActivity(new Intent(getApplicationContext(), ManageActivity.class));
                 finish();
