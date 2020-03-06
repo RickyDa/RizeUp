@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RizeUp</string>
+    <string name="queue_name">Queue Name</string>
 </resources>

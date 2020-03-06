@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp"
-    android:id="@+id/participant_layout">
+    android:padding="5dp"
+    android:id="@+id/participant_layout"
+    android:layout_margin="5dp"
+    android:background="@drawable/participant_border">
+
+    <TextView
+        android:id="@+id/participant_number"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="N"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/circle"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/participant_image"
-        android:layout_width="87dp"
-        android:layout_height="87dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_margin="5dp"
         android:src='@mipmap/ic_launcher_round'/>
+
     <RelativeLayout
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/participant_image"
@@ -23,13 +39,6 @@
             android:text="Name"
             android:textColor="#000"
             android:textSize="20sp"/>
-
-        <TextView
-            android:id="@+id/participant_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:layout_below="@id/participant_name"/>
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
