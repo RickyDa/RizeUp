@@ -4,23 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateQueue.CreateQueueActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
 
-    <EditText
-        android:id="@+id/enter_q_name"
+    tools:context=".CreateQueue.CreateQueueActivity">
+
+    <ProgressBar
+        android:id="@+id/uploadProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:hint="Enter Queue name" />
+        android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/createQBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Create" />
-    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="50dp">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/queueImg"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:src="@drawable/queueimg" />
+
+            <Button
+                android:id="@+id/changeImgBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableStart="@drawable/ic_archive_black_24dp"
+                android:text="change" />
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/enter_q_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:hint="Enter Queue name" />
+
+        <Button
+            android:id="@+id/createQBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Create" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -39,11 +39,11 @@ public class QueueListRecyclerViewAdapter  extends RecyclerView.Adapter<QueueLis
 
     @Override
     public void onBindViewHolder(@NonNull QueueHolder holder, int position) {
-        User owner = queues.get(position).getOwner();
-        holder.queueName.setText(queues.get(position).getName());
-        holder.queueId.setText(queues.get(position).getName()+queues.get(position).getKey());
-        if(!(owner.getImageUrl().trim().equals("")))
-            Glide.with(mContext).asBitmap().load(queues.get(position).getOwner().getImageUrl()).into(holder.ownerImage);
+//        User owner = queues.get(position).getOwnerUid();
+//        holder.queueName.setText(queues.get(position).getName());
+//        holder.queueId.setText(queues.get(position).getName()+queues.get(position).getKey());
+//        if(!(owner.getImageUrl().trim().equals("")))
+//            Glide.with(mContext).asBitmap().load(queues.get(position).getOwnerUid().getImageUrl()).into(holder.ownerImage);
     }
 
     @Override
