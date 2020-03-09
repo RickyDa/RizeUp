@@ -1,9 +1,10 @@
 package com.rizeup.CreateQueue;
 
-import com.rizeup.SignUp.RiZeUpUser;
-import com.rizeup.utils.User;
+import com.rizeup.ManageQueue.QueueParticipant;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RizeUpQueue {
 
@@ -14,13 +15,13 @@ public class RizeUpQueue {
     private String imageUrl;
     private double lat;
     private double lng;
-    private ArrayList<String> participants;
+    private HashMap<String, QueueParticipant> participants;
 
 
     public RizeUpQueue() {
     }
 
-    public RizeUpQueue(String name, String ownerName, String ownerUid, String key, String imageUrl, double lat, double lng, ArrayList<String> participants) {
+    public RizeUpQueue(String name, String ownerName, String ownerUid, String key, String imageUrl, double lat, double lng, HashMap<String, QueueParticipant> participants) {
         this.name = name;
         this.ownerName = ownerName;
         this.ownerUid = ownerUid;
@@ -59,7 +60,7 @@ public class RizeUpQueue {
         return ownerUid;
     }
 
-    public ArrayList<String> getParticipants() {
+    public HashMap<String, QueueParticipant> getParticipants() {
         return participants;
     }
 }

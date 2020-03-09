@@ -35,6 +35,8 @@ import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -139,10 +141,8 @@ public class CreateQueueActivity extends RiZeUpActivity {
     }
 
     public void createQueue(String qKey, String imageDownLoadUrl) {
-        //TODO: DELETE
-        ArrayList<String> list = new ArrayList<>(Arrays.asList("4VvdIHOGo6Rgpx6krnKe8yWO4Nm2","YZZ69efH6afIspSsNWRkO4mPDwc2","hEgHL8ja5IXHzreH4ZNdt5P6Sy53"));
 
-        RizeUpQueue q = new RizeUpQueue(mEditQueueName.getText().toString(), theUser.getDisplayName(), theUser.getUid(), qKey, imageDownLoadUrl, lat, lng, list);
+        RizeUpQueue q = new RizeUpQueue(mEditQueueName.getText().toString(), theUser.getDisplayName(), theUser.getUid(), qKey, imageDownLoadUrl, lat, lng, null);
         DatabaseReference child = databaseRef.child(theUser.getUid());
         child.setValue(q).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -158,6 +158,7 @@ public class CreateQueueActivity extends RiZeUpActivity {
                 //start Manage activity
                 startActivity(new Intent(getApplicationContext(), ManageActivity.class));
                 finish();
+                System.currentTimeMillis();
             }
         });
 
