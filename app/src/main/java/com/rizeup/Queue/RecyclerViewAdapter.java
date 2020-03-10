@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.participant = participant;
 
     }
+
     @NonNull
     @Override
     public ParticipantView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,18 +40,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ParticipantView holder, int position) {
-        // TODO: Complete this method after Firebase is connected
-
+    public void onBindViewHolder(@NonNull ParticipantView holder, final int position) {
         holder.participantName.setText(participant.get(position).getName());
         holder.participantNumber.setText(String.valueOf(position));
-        Glide.with(mContext).asBitmap().load(participant.get(position).getImageUri()).into(holder.image);
+
+        if (participant.get(position).getImageUri() == null) {
+            holder.image.setImageResource(R.drawable.defaultimage);
+        } else {
+            Glide.with(mContext).asBitmap().load(participant.get(position).getImageUri()).into(holder.image);
+        }
+
+        holder.participantLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, participant.get(position).getUid(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
         return participant.size();
     }
+
     static class ParticipantView extends RecyclerView.ViewHolder {
 
         CircleImageView image;

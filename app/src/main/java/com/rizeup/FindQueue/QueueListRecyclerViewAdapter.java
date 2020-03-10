@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.rizeup.CreateQueue.RizeUpQueue;
 import com.rizeup.R;
-import com.rizeup.utils.User;
 
 import java.util.ArrayList;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class QueueListRecyclerViewAdapter  extends RecyclerView.Adapter<QueueListRecyclerViewAdapter.QueueHolder>{
+public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueListRecyclerViewAdapter.QueueHolder> {
     private static final String TAG = "QueueListRecyclerViewAd";
     private Context mContext;
     private ArrayList<RizeUpQueue> queues;
@@ -39,11 +39,18 @@ public class QueueListRecyclerViewAdapter  extends RecyclerView.Adapter<QueueLis
 
     @Override
     public void onBindViewHolder(@NonNull QueueHolder holder, int position) {
-//        User owner = queues.get(position).getOwnerUid();
-//        holder.queueName.setText(queues.get(position).getName());
-//        holder.queueId.setText(queues.get(position).getName()+queues.get(position).getKey());
-//        if(!(owner.getImageUrl().trim().equals("")))
-//            Glide.with(mContext).asBitmap().load(queues.get(position).getOwnerUid().getImageUrl()).into(holder.ownerImage);
+        final RizeUpQueue q = queues.get(position);
+        holder.queueName.setText(q.getName());
+        holder.queueOwner.setText(q.getOwnerName());
+        if (!(q.getImageUrl().trim().equals("")))
+            Glide.with(mContext).asBitmap().load(queues.get(position).getImageUrl()).into(holder.queueImage);
+        holder.queueLayout.setOnClickListener(new View.OnClickListener() {
+            //TODO: change action to open MAP
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "lat: " + q.getLat() + "lng:" + q.getLng(),Toast.LENGTH_SHORT ).show();
+            }
+        });
     }
 
     @Override
@@ -51,18 +58,18 @@ public class QueueListRecyclerViewAdapter  extends RecyclerView.Adapter<QueueLis
         return queues.size();
     }
 
-    public class QueueHolder extends RecyclerView.ViewHolder{
+    public class QueueHolder extends RecyclerView.ViewHolder {
 
-        CircleImageView ownerImage;
+        CircleImageView queueImage;
         TextView queueName;
-        TextView queueId;
+        TextView queueOwner;
         RelativeLayout queueLayout;
 
         public QueueHolder(@NonNull View itemView) {
             super(itemView);
-            ownerImage = itemView.findViewById(R.id.queue_image);
+            queueImage = itemView.findViewById(R.id.queue_image);
             queueName = itemView.findViewById(R.id.queue_name);
-            queueId = itemView.findViewById(R.id.queue_ref);
+            queueOwner = itemView.findViewById(R.id.queue_owner);
             queueLayout = itemView.findViewById(R.id.queue_layout);
         }
 

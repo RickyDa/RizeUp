@@ -101,9 +101,8 @@ public class SignUpActivity extends RiZeUpActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && data != null) {
-
-            if (requestCode == STORAGE_CODE_REQUEST && data.getData() != null) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == STORAGE_CODE_REQUEST && data.getData() != null && data != null) {
                 this.imageUri = data.getData();
             }
             Glide.with(this).load(this.imageUri).into(this.profileImg);
