@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +20,10 @@ import com.rizeup.CreateQueue.CreateQueueActivity;
 import com.rizeup.FindQueue.FindQueueActivity;
 import com.rizeup.ManageQueue.ManageActivity;
 import com.rizeup.R;
+import com.rizeup.SignUp.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
+
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -27,7 +31,6 @@ public class MainMenu extends AppCompatActivity {
     private static final String TAG = "MainMenu.MainMenuActivity";
 
     private FirebaseUser theUser;
-    private FirebaseAuth mAuth;
     private DatabaseReference queue;
     private CircleImageView profileImg;
 
@@ -36,17 +39,11 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        this.mAuth = FirebaseAuth.getInstance();
-        this.theUser = mAuth.getCurrentUser();
+        this.theUser = FirebaseAuth.getInstance().getCurrentUser();
         this.queue = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
         this.profileImg = findViewById(R.id.userProfileImage);
 
-        if (theUser.getPhotoUrl() != null) {
-            //TODO : load user's image from the realtimeDB
-            Glide.with(this).load(theUser.getPhotoUrl()).into(this.profileImg);
-        } else {
-            Glide.with(this).load(R.drawable.defaultimage).into(this.profileImg);
-        }
+        loadImage();
 
         findViewById(R.id.findBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +56,6 @@ public class MainMenu extends AppCompatActivity {
         findViewById(R.id.manageBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 queue.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -69,14 +65,32 @@ public class MainMenu extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), CreateQueueActivity.class));
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 });
 
             }
         });
+    }
+
+    private void loadImage() {
+        DatabaseReference users = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS).child(theUser.getUid());
+        if (theUser.getPhotoUrl() != null) {
+            users.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Glide.with(getApplicationContext()).load(dataSnapshot.getValue(RiZeUpUser.class).getImageUri()).into(profileImg);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(), TAG + "Failed load Image", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } else {
+            Glide.with(this).load(R.drawable.defaultimage).into(this.profileImg);
+        }
     }
 }

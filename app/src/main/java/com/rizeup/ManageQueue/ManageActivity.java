@@ -1,22 +1,17 @@
 package com.rizeup.ManageQueue;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rizeup.CreateQueue.RizeUpQueue;
-import com.rizeup.Queue.RecyclerViewAdapter;
+import com.rizeup.Queue.ParticipantRecyclerViewAdapter;
 import com.rizeup.R;
 import com.rizeup.SignUp.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
@@ -46,7 +41,7 @@ public class ManageActivity extends AppCompatActivity {
     private TextView name;
     private CircleImageView image;
     private RecyclerView queue;
-    private RecyclerViewAdapter adapter;
+    private ParticipantRecyclerViewAdapter adapter;
 
     private ArrayList<RiZeUpUser> participants;
 
@@ -69,11 +64,11 @@ public class ManageActivity extends AppCompatActivity {
         this.participantsRef = queueRef.child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
         this.usersRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
 
-        /// ### TODO : REMOVE AFTER TESTING
-        participantsRef.child("4VvdIHOGo6Rgpx6krnKe8yWO4Nm2").setValue(new QueueParticipant("4VvdIHOGo6Rgpx6krnKe8yWO4Nm2", System.currentTimeMillis()));
-        participantsRef.child("YZZ69efH6afIspSsNWRkO4mPDwc2").setValue(new QueueParticipant("YZZ69efH6afIspSsNWRkO4mPDwc2", System.currentTimeMillis()));
-        participantsRef.child("hEgHL8ja5IXHzreH4ZNdt5P6Sy53").setValue(new QueueParticipant("hEgHL8ja5IXHzreH4ZNdt5P6Sy53", System.currentTimeMillis()));
-        ///     TODO : REMOVE AFTER TESTING ####
+//        /// ### TODO : REMOVE AFTER TESTING
+//        participantsRef.child("4VvdIHOGo6Rgpx6krnKe8yWO4Nm2").setValue(new QueueParticipant("4VvdIHOGo6Rgpx6krnKe8yWO4Nm2", System.currentTimeMillis()));
+//        participantsRef.child("YZZ69efH6afIspSsNWRkO4mPDwc2").setValue(new QueueParticipant("YZZ69efH6afIspSsNWRkO4mPDwc2", System.currentTimeMillis()));
+//        participantsRef.child("hEgHL8ja5IXHzreH4ZNdt5P6Sy53").setValue(new QueueParticipant("hEgHL8ja5IXHzreH4ZNdt5P6Sy53", System.currentTimeMillis()));
+//        ///     TODO : REMOVE AFTER TESTING ####
 
         initQueue();
         initItemTouchHelper();
@@ -83,7 +78,6 @@ public class ManageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Soon...", Toast.LENGTH_LONG).show();
-                participantsRef.child("IQqVjN5pPHT4iGlze3Qc8KIGdFe2").setValue(new QueueParticipant("IQqVjN5pPHT4iGlze3Qc8KIGdFe2", System.currentTimeMillis()));
             }
         });
     }
@@ -141,7 +135,7 @@ public class ManageActivity extends AppCompatActivity {
                                     participants.add(user);
                                 }
                             }
-                            adapter = new RecyclerViewAdapter(getApplicationContext(), participants);
+                            adapter = new ParticipantRecyclerViewAdapter(getApplicationContext(), participants);
                             queue.setAdapter(adapter);
                         }
 
