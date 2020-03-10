@@ -33,6 +33,7 @@ import com.google.firebase.storage.UploadTask;
 import com.rizeup.CreateQueue.RizeUpQueue;
 import com.rizeup.Queue.QueueActivity;
 import com.rizeup.R;
+import com.rizeup.utils.FirebaseReferences;
 import com.rizeup.utils.User;
 import com.rizeup.utils.UserFactory;
 
@@ -44,9 +45,9 @@ public class FindQueueActivity extends AppCompatActivity {
     private static final String TAG = "FindQueueActivity";
     private static final int REQUEST_CAMERA_CODE = 100;
 
-    private RecyclerView queueListRV;
+    private RecyclerView queueListRecyclerView;
     private QueueListRecyclerViewAdapter qListAdapter;
-    private DatabaseReference mQueueDBRef;
+    private DatabaseReference databaseQueueRef;
     private ArrayList<RizeUpQueue> qList;
 
     private StorageTask mUploadTask;
@@ -64,12 +65,13 @@ public class FindQueueActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_queue);
         this.qList = new ArrayList<>();
-        this.queueListRV = findViewById(R.id.recyclerViewQList);
-        this.queueListRV.setHasFixedSize(true);
-        this.queueListRV.setLayoutManager(new LinearLayoutManager(this));
-        this.mQueueDBRef = FirebaseDatabase.getInstance().getReference("Queues");
+        this.queueListRecyclerView = findViewById(R.id.recyclerViewQList);
+        this.queueListRecyclerView.setHasFixedSize(true);
+        this.queueListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mQueueDBRef.addValueEventListener(new ValueEventListener() {
+        this.databaseQueueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
+
+        databaseQueueRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -77,7 +79,7 @@ public class FindQueueActivity extends AppCompatActivity {
                     qList.add(q);
                 }
                 qListAdapter = new QueueListRecyclerViewAdapter(getApplicationContext(), qList);
-                queueListRV.setAdapter(qListAdapter);
+                queueListRecyclerView.setAdapter(qListAdapter);
             }
 
             @Override
@@ -93,31 +95,31 @@ public class FindQueueActivity extends AppCompatActivity {
 
 
         // TODO: need to edit this.
-        this.mDataRef = FirebaseDatabase.getInstance().getReference("Users");
-        this.mStorageRef = FirebaseStorage.getInstance().getReference("User-Images");
-        this.mUploadTask = null;
-
-        this.progressBar = findViewById(R.id.progressBar);
-        // ######################### FOR TESTING #########################
-//        uf = new UserFactory(getApplicationContext());
-////        uf.deleteUsers();
-//        uf.addUsers();
-
-        this.theUser = new User("Ricky", "Rickyyy44@gmail.com", "");
-        // ###############################################################
-
-        findViewById(R.id.btnGetInQ).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent startQ = new Intent(getApplicationContext(), QueueActivity.class);
-//                startActivity(startQ);
-                if (mUploadTask != null && mUploadTask.isInProgress())
-                    Toast.makeText(getApplicationContext(), "Queueing is in Progress", Toast.LENGTH_LONG).show();
-                else
-                    dispatchTakePictureIntent();
-            }
-        });
+//        this.mDataRef = FirebaseDatabase.getInstance().getReference("Users");
+//        this.mStorageRef = FirebaseStorage.getInstance().getReference("User-Images");
+//        this.mUploadTask = null;
 //
+//        this.progressBar = findViewById(R.id.progressBar);
+//        // ######################### FOR TESTING #########################
+////        uf = new UserFactory(getApplicationContext());
+//////        uf.deleteUsers();
+////        uf.addUsers();
+//
+//        this.theUser = new User("Ricky", "Rickyyy44@gmail.com", "");
+//        // ###############################################################
+//
+//        findViewById(R.id.btnGetInQ).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent startQ = new Intent(getApplicationContext(), QueueActivity.class);
+////                startActivity(startQ);
+//                if (mUploadTask != null && mUploadTask.isInProgress())
+//                    Toast.makeText(getApplicationContext(), "Queueing is in Progress", Toast.LENGTH_LONG).show();
+//                else
+//                    dispatchTakePictureIntent();
+//            }
+//        });
+////
     }
 
 

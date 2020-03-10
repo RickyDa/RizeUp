@@ -42,10 +42,10 @@ public class MainMenu extends AppCompatActivity {
         this.profileImg = findViewById(R.id.userProfileImage);
 
         if (theUser.getPhotoUrl() != null) {
+            //TODO : load user's image from the realtimeDB
             Glide.with(this).load(theUser.getPhotoUrl()).into(this.profileImg);
         } else {
             Glide.with(this).load(R.drawable.defaultimage).into(this.profileImg);
-            // TODO set listener to Profile pick for image capture
         }
 
         findViewById(R.id.findBtn).setOnClickListener(new View.OnClickListener() {
