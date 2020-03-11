@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,20 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.rizeup.R;
 import com.rizeup.SignUp.RiZeUpUser;
-import com.rizeup.utils.User;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ParticipantView> {
+public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ParticipantView> {
 
     private Context mContext;
     private ArrayList<RiZeUpUser> participant;
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<RiZeUpUser> participant) {
+    public ParticipantRecyclerViewAdapter(Context mContext, ArrayList<RiZeUpUser> participant) {
         this.mContext = mContext;
         this.participant = participant;
 
@@ -56,6 +55,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Toast.makeText(mContext, participant.get(position).getUid(), Toast.LENGTH_SHORT).show();
             }
         });
+        if(participant.get(position).getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            // TODO change background
+            holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);
+        }
+
     }
 
 

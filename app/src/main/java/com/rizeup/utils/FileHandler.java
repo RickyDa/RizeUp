@@ -12,13 +12,13 @@ import java.util.Calendar;
 
 public class FileHandler {
 
-    public static String getFileExtension( ContentResolver cR,Uri uri){
+    public static String getFileExtension(ContentResolver cR, Uri uri) {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(cR.getType(uri));
     }
 
     public static File createImageFile(Context context) throws IOException {
         // Create an image file name
-        String timeStamp = Calendar.getInstance().getTime().toString().replace(" ","_");
+        String timeStamp = Calendar.getInstance().getTime().toString().replace(" ", "_");
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);

@@ -29,14 +29,8 @@ import com.google.firebase.storage.UploadTask;
 import com.rizeup.ManageQueue.ManageActivity;
 import com.rizeup.RiZeUpActivity;
 import com.rizeup.R;
-import com.rizeup.SignUp.RiZeUpUser;
 import com.rizeup.utils.FileHandler;
 import com.rizeup.utils.FirebaseReferences;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -142,7 +136,7 @@ public class CreateQueueActivity extends RiZeUpActivity {
 
     public void createQueue(String qKey, String imageDownLoadUrl) {
 
-        RizeUpQueue q = new RizeUpQueue(mEditQueueName.getText().toString(), theUser.getDisplayName(), theUser.getUid(), qKey, imageDownLoadUrl, lat, lng, null);
+        RiZeUpQueue q = new RiZeUpQueue(mEditQueueName.getText().toString(), theUser.getDisplayName(), theUser.getUid(), qKey, imageDownLoadUrl, lat, lng, null);
         DatabaseReference child = databaseRef.child(theUser.getUid());
         child.setValue(q).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
