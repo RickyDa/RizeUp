@@ -1,6 +1,6 @@
 package com.rizeup.ManageQueue;
 
-public class QueueParticipant {
+public class QueueParticipant implements Comparable<QueueParticipant> {
 
     private String uid;
     private long timeStamp;
@@ -19,5 +19,15 @@ public class QueueParticipant {
 
     public long getTimeStamp() {
         return timeStamp;
+    }
+
+    @Override
+    public int compareTo(QueueParticipant qp) {
+        if (this.timeStamp > qp.timeStamp)
+            return 1;
+        else if (this.timeStamp < qp.timeStamp)
+            return -1;
+        else
+            return 0;
     }
 }

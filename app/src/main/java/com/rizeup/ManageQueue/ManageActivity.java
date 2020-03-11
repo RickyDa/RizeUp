@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rizeup.CreateQueue.RizeUpQueue;
+import com.rizeup.CreateQueue.RiZeUpQueue;
 import com.rizeup.Queue.ParticipantRecyclerViewAdapter;
 import com.rizeup.R;
 import com.rizeup.SignUp.RiZeUpUser;
@@ -121,7 +121,7 @@ public class ManageActivity extends AppCompatActivity {
         this.queueRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final RizeUpQueue q = dataSnapshot.getValue(RizeUpQueue.class);
+                final RiZeUpQueue q = dataSnapshot.getValue(RiZeUpQueue.class);
                 name.setText(q.getName());
                 Glide.with(getApplicationContext()).load(q.getImageUrl()).into(image);
                 final HashMap<String, QueueParticipant> participantsUid = q.getParticipants();

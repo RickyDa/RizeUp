@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.rizeup.R;
 import com.rizeup.SignUp.RiZeUpUser;
 
@@ -54,6 +55,11 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
                 Toast.makeText(mContext, participant.get(position).getUid(), Toast.LENGTH_SHORT).show();
             }
         });
+        if(participant.get(position).getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            // TODO change background
+            holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);
+        }
+
     }
 
 

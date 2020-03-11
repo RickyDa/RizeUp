@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rizeup.CreateQueue.RizeUpQueue;
+import com.rizeup.CreateQueue.RiZeUpQueue;
 import com.rizeup.FindQueue.FindQueueActivity;
 import com.rizeup.ManageQueue.QueueParticipant;
 import com.rizeup.R;
@@ -46,8 +46,8 @@ public class QueueActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_queue);
         Intent intent = getIntent();
-        String message = intent.getStringExtra(FindQueueActivity.QID_EXTRA);
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        String queueId = intent.getStringExtra(FindQueueActivity.QID_EXTRA);
+        Toast.makeText(getApplicationContext(), queueId, Toast.LENGTH_SHORT).show();
 
 
         this.participants = new ArrayList<>();
@@ -55,7 +55,7 @@ public class QueueActivity extends AppCompatActivity {
         this.queueImage = findViewById(R.id.userQueue_image);
         this.queueName = findViewById(R.id.userQueue_name);
 
-        this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES + "/" + message);
+        this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES + "/" + queueId);
         this.usersRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
         initQueue();
 
@@ -67,11 +67,15 @@ public class QueueActivity extends AppCompatActivity {
         this.queueRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final RizeUpQueue q = dataSnapshot.getValue(RizeUpQueue.class);
+                final RiZeUpQueue q = dataSnapshot.getValue(RiZeUpQueue.class);
+
+                //TODO implement sort participant by time stamp
                 queueName.setText(q.getName());
                 Glide.with(getApplicationContext()).load(q.getImageUrl()).into(queueImage);
+
                 final HashMap<String, QueueParticipant> participantsUid = q.getParticipants();
                 if (q.getParticipants() != null) {
+                    q.sortParticipants();
                     usersRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

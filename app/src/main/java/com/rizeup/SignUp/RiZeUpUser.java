@@ -1,10 +1,6 @@
 package com.rizeup.SignUp;
 
-import android.net.Uri;
-
 import androidx.annotation.Nullable;
-
-import com.rizeup.CreateQueue.RizeUpQueue;
 
 public class RiZeUpUser {
 
