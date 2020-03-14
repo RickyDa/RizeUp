@@ -26,9 +26,10 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.rizeup.ManageQueue.ManageActivity;
+import com.rizeup.Queue.ManageActivity;
 import com.rizeup.RiZeUpActivity;
 import com.rizeup.R;
+import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.utils.FileHandler;
 import com.rizeup.utils.FirebaseReferences;
 

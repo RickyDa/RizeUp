@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ManageQueue.ManageActivity"></activity>
+        <activity android:name=".Queue.ManageActivity"></activity>
         <activity android:name=".MainMenu.MainMenu" />
         <activity android:name=".CreateQueue.CreateQueueActivity" />
         <activity android:name=".FindQueue.FindQueueActivity" />

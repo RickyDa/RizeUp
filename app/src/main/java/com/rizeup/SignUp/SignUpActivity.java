@@ -29,6 +29,7 @@ import com.google.firebase.storage.UploadTask;
 import com.rizeup.MainMenu.MainMenu;
 import com.rizeup.RiZeUpActivity;
 import com.rizeup.R;
+import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FileHandler;
 import com.rizeup.utils.FirebaseReferences;
 
@@ -138,8 +139,6 @@ public class SignUpActivity extends RiZeUpActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 uploadUserImage();
-                startActivity(new Intent(getApplicationContext(), MainMenu.class));
-                finish();
             }
         });
 
@@ -181,6 +180,12 @@ public class SignUpActivity extends RiZeUpActivity {
     private void createDatabaseEntry(String downloadUrl) {
         RiZeUpUser newUser = new RiZeUpUser(mAuth.getCurrentUser().getDisplayName(), downloadUrl, mAuth.getCurrentUser().getUid());
         DatabaseReference child = mDatabase.child(mAuth.getCurrentUser().getUid());
-        child.setValue(newUser);
+        child.setValue(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                startActivity(new Intent(getApplicationContext(), MainMenu.class));
+                finish();
+            }
+        });
     }
 }

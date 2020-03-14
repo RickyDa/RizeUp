@@ -1,43 +1,18 @@
 package com.rizeup.Queue;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.rizeup.CreateQueue.RiZeUpQueue;
 import com.rizeup.FindQueue.FindQueueActivity;
-import com.rizeup.ManageQueue.QueueParticipant;
 import com.rizeup.R;
-import com.rizeup.SignUp.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+public class QueueActivity extends RiZeUpQueueActivity {
 
-public class QueueActivity extends AppCompatActivity {
-
-    private DatabaseReference queueRef;
-    private DatabaseReference usersRef;
-
-    private RecyclerView queue;
-    private ParticipantRecyclerViewAdapter adapter;
-    private ArrayList<RiZeUpUser> participants;
-    private CircleImageView queueImage;
-    private TextView queueName;
 
     private static final String TAG = "Queue.QueueActivity";
 
@@ -49,56 +24,16 @@ public class QueueActivity extends AppCompatActivity {
         String queueId = intent.getStringExtra(FindQueueActivity.QID_EXTRA);
         Toast.makeText(getApplicationContext(), queueId, Toast.LENGTH_SHORT).show();
 
-
+        this.loaded = false;
         this.participants = new ArrayList<>();
         this.queue = findViewById(R.id.userQueue_recyclerView);
         this.queueImage = findViewById(R.id.userQueue_image);
         this.queueName = findViewById(R.id.userQueue_name);
 
         this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES + "/" + queueId);
-        this.usersRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
+        this.participantsRef = queueRef.child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
         initQueue();
 
     }
 
-    private void initQueue() {
-        this.queue.setHasFixedSize(true);
-        this.queue.setLayoutManager(new LinearLayoutManager(this));
-        this.queueRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final RiZeUpQueue q = dataSnapshot.getValue(RiZeUpQueue.class);
-
-                //TODO implement sort participant by time stamp
-                queueName.setText(q.getName());
-                Glide.with(getApplicationContext()).load(q.getImageUrl()).into(queueImage);
-
-                final HashMap<String, QueueParticipant> participantsUid = q.getParticipants();
-                if (q.getParticipants() != null) {
-                    q.sortParticipants();
-                    usersRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                RiZeUpUser user = snapshot.getValue(RiZeUpUser.class);
-                                if (participantsUid.containsKey(user.getUid()) && !participants.contains(user)) {
-                                    participants.add(user);
-                                }
-                            }
-                            adapter = new ParticipantRecyclerViewAdapter(getApplicationContext(), participants);
-                            queue.setAdapter(adapter);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
 }

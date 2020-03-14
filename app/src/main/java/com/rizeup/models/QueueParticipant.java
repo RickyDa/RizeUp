@@ -1,4 +1,6 @@
-package com.rizeup.ManageQueue;
+package com.rizeup.models;
+
+import androidx.annotation.Nullable;
 
 public class QueueParticipant implements Comparable<QueueParticipant> {
 
@@ -29,5 +31,15 @@ public class QueueParticipant implements Comparable<QueueParticipant> {
             return -1;
         else
             return 0;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof QueueParticipant)){
+            return false;
+        }else {
+            QueueParticipant qp = (QueueParticipant) obj;
+            return this.uid.equals(qp.uid);
+        }
     }
 }
