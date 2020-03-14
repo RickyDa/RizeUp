@@ -163,7 +163,7 @@ public class RiZeUpActivity extends AppCompatActivity {
             } else if (requestCode == STORAGE_CODE_REQUEST) {
                 openFileChooser();
             }else if (requestCode == LOCATION_CODE_REQUEST){
-                Log.d("PERMISSION", "location permission granted");
+                getLastLocation();
             }
         }
     }
