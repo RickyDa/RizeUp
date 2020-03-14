@@ -18,12 +18,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rizeup.CreateQueue.CreateQueueActivity;
 import com.rizeup.FindQueue.FindQueueActivity;
-import com.rizeup.ManageQueue.ManageActivity;
+import com.rizeup.Queue.ManageActivity;
 import com.rizeup.R;
-import com.rizeup.SignUp.RiZeUpUser;
+import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
-
-import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -80,7 +78,9 @@ public class MainMenu extends AppCompatActivity {
             users.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Glide.with(getApplicationContext()).load(dataSnapshot.getValue(RiZeUpUser.class).getImageUri()).into(profileImg);
+                    String uri = dataSnapshot.getValue(RiZeUpUser.class).getImageUri();
+                    if(uri != null)
+                        Glide.with(getApplicationContext()).load(uri).into(profileImg);
                 }
 
                 @Override

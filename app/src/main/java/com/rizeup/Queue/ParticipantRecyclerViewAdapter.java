@@ -13,8 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rizeup.R;
-import com.rizeup.SignUp.RiZeUpUser;
+import com.rizeup.models.QueueParticipant;
+import com.rizeup.models.RiZeUpUser;
+import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
 
@@ -23,11 +30,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ParticipantView> {
 
     private Context mContext;
-    private ArrayList<RiZeUpUser> participant;
+    private ArrayList<QueueParticipant> participant;
+    private DatabaseReference userRef;
 
-    public ParticipantRecyclerViewAdapter(Context mContext, ArrayList<RiZeUpUser> participant) {
+    public ParticipantRecyclerViewAdapter(Context mContext, ArrayList<QueueParticipant> participant) {
         this.mContext = mContext;
         this.participant = participant;
+        this.userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
 
     }
 
@@ -39,26 +48,38 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ParticipantView holder, final int position) {
-        holder.participantName.setText(participant.get(position).getName());
-        holder.participantNumber.setText(String.valueOf(position));
-
-        if (participant.get(position).getImageUri() == null) {
-            holder.image.setImageResource(R.drawable.defaultimage);
-        } else {
-            Glide.with(mContext).asBitmap().load(participant.get(position).getImageUri()).into(holder.image);
-        }
-
-        holder.participantLayout.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(@NonNull final ParticipantView holder, final int position) {
+        this.userRef.child(participant.get(position).getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, participant.get(position).getUid(), Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final RiZeUpUser user = dataSnapshot.getValue(RiZeUpUser.class);
+                holder.participantName.setText(user.getName());
+                holder.participantNumber.setText(String.valueOf(position));
+                if (user.getImageUri() == null) {
+                    holder.image.setImageResource(R.drawable.defaultimage);
+                } else {
+                    Glide.with(mContext).asBitmap().load(user.getImageUri()).into(holder.image);
+                }
+
+                holder.participantLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mContext, user.getUid(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                if(user.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    // TODO change background
+                    holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
-        if(participant.get(position).getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            // TODO change background
-            holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);
-        }
+
 
     }
 

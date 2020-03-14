@@ -1,4 +1,4 @@
-package com.rizeup.SignUp;
+package com.rizeup.models;
 
 import androidx.annotation.Nullable;
 

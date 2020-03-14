@@ -1,13 +1,10 @@
-package com.rizeup.CreateQueue;
+package com.rizeup.models;
 
 import androidx.annotation.Nullable;
-
-import com.rizeup.ManageQueue.QueueParticipant;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
