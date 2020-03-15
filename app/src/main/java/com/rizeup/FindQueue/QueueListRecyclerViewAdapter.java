@@ -26,6 +26,7 @@ import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.models.QueueParticipant;
 import com.rizeup.Queue.QueueActivity;
 import com.rizeup.R;
+import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
@@ -101,6 +102,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         Context context;
         String id;
         DatabaseReference qRef;
+        DatabaseReference userRef;
 
         public QueueHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,32 +116,43 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
             qRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
+            userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
 
         @Override
         public void onClick(View v) {
-            final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            final DatabaseReference queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES).child(id).child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
-            queueRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            this.userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (!dataSnapshot.hasChild(userId)) {
-                        queueRef.child(userId).setValue(new QueueParticipant(userId, System.currentTimeMillis())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                startQueueActivity();
-                            }
-                        });
-                    } else {
+                    if (dataSnapshot.hasChild(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG)) {
+                        Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
                         startQueueActivity();
+                    } else {
+                        registerUser();
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
             });
+        }
 
+        private void registerUser() {
+            final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final DatabaseReference queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES).child(id).child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
+            queueRef.child(userId).setValue(new QueueParticipant(userId, System.currentTimeMillis())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    userRef.child(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).setValue(id).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            startQueueActivity();
+                        }
+                    });
+                }
+            });
         }
 
         private void startQueueActivity() {

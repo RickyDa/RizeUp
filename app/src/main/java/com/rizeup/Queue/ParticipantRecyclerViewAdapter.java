@@ -61,13 +61,6 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
                     Glide.with(mContext).asBitmap().load(user.getImageUri()).into(holder.image);
                 }
 
-                holder.participantLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(mContext, user.getUid(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
                 if(user.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     // TODO change background
                     holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);

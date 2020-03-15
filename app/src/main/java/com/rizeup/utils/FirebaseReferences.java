@@ -7,4 +7,5 @@ public class FirebaseReferences {
     public static final String STORAGE_USER_IMAGE = "RiZeUp-User-Images";
     public static final String STORAGE_QUEUE_IMAGE = "RiZeUp-queue-Images";
     public static final String REAL_TIME_DATABASE_PARTICIPANTS = "participants";
+    public static final String REAL_TIME_RIZE_UP_USER_REG = "registeredQ";
 }

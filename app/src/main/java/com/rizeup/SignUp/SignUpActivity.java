@@ -178,7 +178,7 @@ public class SignUpActivity extends RiZeUpActivity {
     }
 
     private void createDatabaseEntry(String downloadUrl) {
-        RiZeUpUser newUser = new RiZeUpUser(mAuth.getCurrentUser().getDisplayName(), downloadUrl, mAuth.getCurrentUser().getUid());
+        RiZeUpUser newUser = new RiZeUpUser(mAuth.getCurrentUser().getDisplayName(), downloadUrl, mAuth.getCurrentUser().getUid(),null);
         DatabaseReference child = mDatabase.child(mAuth.getCurrentUser().getUid());
         child.setValue(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

@@ -7,14 +7,18 @@ public class RiZeUpUser {
     private String name;
     private String imageUri;
     private String uid;
+    private String registeredQ;
 
     public RiZeUpUser() {
     }
 
-    public RiZeUpUser(String name, String imageUri, String uid) {
+
+
+    public RiZeUpUser(String name, String imageUri, String uid, String registeredQ) {
         this.name = name;
         this.imageUri = imageUri;
         this.uid = uid;
+        this.registeredQ = registeredQ;
     }
 
     public String getName() {
@@ -29,6 +33,9 @@ public class RiZeUpUser {
         return uid;
     }
 
+    public String getRegisteredQ() {
+        return registeredQ;
+    }
     @Override
     public boolean equals(@Nullable Object obj) {
         if(!(obj instanceof RiZeUpUser)){
