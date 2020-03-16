@@ -116,6 +116,8 @@ public class SignUpActivity extends RiZeUpActivity {
             Toast.makeText(this, "Please retype password", Toast.LENGTH_SHORT).show();
             password.getText().clear();
             rePassword.getText().clear();
+        }else if( pw.trim().isEmpty() || rePassword.getText().toString().trim().isEmpty() || fullName.getText().toString().trim().isEmpty() || email.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Please fill all the fields!", Toast.LENGTH_LONG).show();
         } else {
             mAuth.createUserWithEmailAndPassword(email.getText().toString(), pw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -184,7 +186,7 @@ public class SignUpActivity extends RiZeUpActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 startActivity(new Intent(getApplicationContext(), MainMenu.class));
-                finish();
+                finishAffinity();
             }
         });
     }

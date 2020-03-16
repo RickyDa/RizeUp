@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "1062232067688",
+    "firebase_url": "https://rizeup-e852b.firebaseio.com",
+    "project_id": "rizeup-e852b",
+    "storage_bucket": "rizeup-e852b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062232067688:android:b7243c0ed19e4b06f7b5dd",
+        "android_client_info": {
+          "package_name": "com.rizeup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062232067688-dav0fiqc90e2a4lq7sek5ivl4dfe3moh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rizeup",
+            "certificate_hash": "9391f52e63e0263314f1955e7639025399c797bc"
+          }
+        },
+        {
+          "client_id": "1062232067688-vatcaqdvchl7kk6j7m55k72hj6ffuvv5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rizeup",
+            "certificate_hash": "b9d015e907cb2f7214296b5ec964af45db2ccf5d"
+          }
+        },
+        {
+          "client_id": "1062232067688-6pph3ib5rhnfpt90v1t3h24t8h56mlld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rizeup",
+            "certificate_hash": "82a9c6a17fc747da519f5e6f2ca3c9850271e5eb"
+          }
+        },
+        {
+          "client_id": "1062232067688-tp558f1bbi912tpudu4nln9dv0kh1ssc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5j6MXxoNnr8tu451wpsSFAm2o_k30hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062232067688-tp558f1bbi912tpudu4nln9dv0kh1ssc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
