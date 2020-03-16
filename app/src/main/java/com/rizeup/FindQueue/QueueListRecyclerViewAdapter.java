@@ -1,19 +1,38 @@
 package com.rizeup.FindQueue;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +45,10 @@ import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.models.QueueParticipant;
 import com.rizeup.Queue.QueueActivity;
 import com.rizeup.R;
-import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,10 +57,11 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
 
     private static final String TAG = "QueueListRecyclerViewAd";
 
-    private Context mContext;
+    private AppCompatActivity mContext;
     private ArrayList<RiZeUpQueue> queues;
+    private Dialog mapDialog;
 
-    public QueueListRecyclerViewAdapter(Context mContext, ArrayList<RiZeUpQueue> queues) {
+    public QueueListRecyclerViewAdapter(AppCompatActivity mContext, ArrayList<RiZeUpQueue> queues) {
         this.mContext = mContext;
         this.queues = queues;
     }
@@ -50,11 +70,12 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
     @Override
     public QueueHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_queueitem, parent, false);
-        return new QueueListRecyclerViewAdapter.QueueHolder(view);
+        final QueueHolder qh = new QueueListRecyclerViewAdapter.QueueHolder(view);
+        return qh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final QueueHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final QueueHolder holder, final int position) {
         final RiZeUpQueue q = queues.get(position);
         holder.queueName.setText(q.getName());
         holder.queueOwner.setText(q.getOwnerName());
@@ -62,15 +83,6 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         if (!(q.getImageUrl().trim().equals("")))
             Glide.with(mContext).asBitmap().load(queues.get(position).getImageUrl()).into(holder.queueImage);
 
-        holder.queueLocation.setOnClickListener(new View.OnClickListener() {
-            //TODO: change action to open MAP
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "lat: " + q.getLat() + "lng:" + q.getLng(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-//        holder.queueNumOfParticipant.setText(String.valueOf(q.getParticipants().size()));
         holder.qRef = holder.qRef.child(q.getOwnerUid() + "/" + FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
         holder.qRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -83,6 +95,20 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
 
             }
         });
+
+        holder.queueLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog(queues.get(position).getLat(), queues.get(position).getLng(), queues.get(position).getName(), queues.get(position).getImageUrl());
+            }
+        });
+
+
+    }
+
+    private void openDialog(double lat, double lng, String name, String imageUrl) {
+        MapDialog md = new MapDialog(lat, lng, name, imageUrl);
+        md.show(mContext.getSupportFragmentManager(),"QUEUE");
     }
 
 

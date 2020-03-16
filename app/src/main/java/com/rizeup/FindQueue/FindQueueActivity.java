@@ -48,7 +48,7 @@ public class FindQueueActivity extends AppCompatActivity {
                     if(!qList.contains(q))
                         qList.add(q);
             }
-                qListAdapter = new QueueListRecyclerViewAdapter(getApplicationContext(), qList);
+                qListAdapter = new QueueListRecyclerViewAdapter(FindQueueActivity.this, qList);
                 queueListRecyclerView.setAdapter(qListAdapter);
             }
 
