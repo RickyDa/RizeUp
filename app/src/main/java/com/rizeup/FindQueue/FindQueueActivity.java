@@ -20,12 +20,11 @@ import com.rizeup.utils.FirebaseReferences;
 import java.util.ArrayList;
 
 public class FindQueueActivity extends AppCompatActivity {
+
     public static final String QID_EXTRA = "qid";
-    private static final String TAG = "FindQueueActivity";
 
     private RecyclerView queueListRecyclerView;
     private QueueListRecyclerViewAdapter qListAdapter;
-    private DatabaseReference databaseQueueRef;
     private ArrayList<RiZeUpQueue> qList;
 
 
@@ -38,7 +37,7 @@ public class FindQueueActivity extends AppCompatActivity {
         this.queueListRecyclerView.setHasFixedSize(true);
         this.queueListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.databaseQueueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
+        DatabaseReference databaseQueueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
 
         databaseQueueRef.addValueEventListener(new ValueEventListener() {
             @Override

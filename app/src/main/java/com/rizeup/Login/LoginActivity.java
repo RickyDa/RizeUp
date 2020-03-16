@@ -22,7 +22,6 @@ import com.rizeup.SignUp.SignUpActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private Button loginBtn, signUpBtn;
     private EditText email, password;
     private Intent signUp, homePage;
 
@@ -31,10 +30,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
-        loginBtn = (Button) findViewById(R.id.btn_login);
-        signUpBtn = (Button) findViewById(R.id.btn_signup);
-        email = (EditText) findViewById(R.id.et_email);
-        password = (EditText) findViewById(R.id.et_password);
+        Button loginBtn = findViewById(R.id.btn_login);
+        Button signUpBtn = findViewById(R.id.btn_signup);
+        email = findViewById(R.id.et_email);
+        password = findViewById(R.id.et_password);
         homePage = new Intent(this, MainMenu.class);
         signUp = new Intent(this, SignUpActivity.class);
         loginBtn.setOnClickListener(new View.OnClickListener() {

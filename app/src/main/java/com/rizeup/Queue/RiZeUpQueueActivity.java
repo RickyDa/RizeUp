@@ -24,23 +24,31 @@ public class RiZeUpQueueActivity extends AppCompatActivity {
     protected DatabaseReference queueRef;
     protected DatabaseReference participantsRef;
     protected boolean loaded;
-    protected RecyclerView queue;
+    protected RecyclerView queueRecyclerView;
     protected ParticipantRecyclerViewAdapter adapter;
     protected ArrayList<QueueParticipant> participants;
-    protected CircleImageView queueImage;
-    protected TextView queueName;
-
+    protected CircleImageView queueImageView;
+    protected TextView queueNameTextView;
+    protected double queueLat;
+    protected double queueLng;
+    protected String queueImageUrl;
+    protected String queueName;
 
     protected void initQueue() {
-        this.queue.setHasFixedSize(true);
-        this.queue.setLayoutManager(new LinearLayoutManager(this));
+        this.queueRecyclerView.setHasFixedSize(true);
+        this.queueRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.queueRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final RiZeUpQueue q = dataSnapshot.getValue(RiZeUpQueue.class);
+                assert q != null;
+                queueLat = q.getLat();
+                queueLng = q.getLng();
+                queueName = q.getName();
+                queueImageUrl = q.getImageUrl();
 
-                queueName.setText(q.getName());
-                Glide.with(getApplicationContext()).load(q.getImageUrl()).into(queueImage);
+                queueNameTextView.setText(queueName);
+                Glide.with(getApplicationContext()).load(queueImageUrl).into(queueImageView);
 
                 if (q.getParticipants() != null) {
                     participantsRef.orderByChild("timeStamp").addValueEventListener(new ValueEventListener() {
@@ -54,7 +62,7 @@ public class RiZeUpQueueActivity extends AppCompatActivity {
                             }
                             if (!loaded) {
                                 adapter = new ParticipantRecyclerViewAdapter(getApplicationContext(), participants);
-                                queue.setAdapter(adapter);
+                                queueRecyclerView.setAdapter(adapter);
                                 loaded = true;
                             } else {
                                 adapter.notifyDataSetChanged();
