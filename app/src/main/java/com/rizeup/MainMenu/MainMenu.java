@@ -26,6 +26,8 @@ import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
 
+import org.w3c.dom.Text;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainMenu extends AppCompatActivity {
@@ -131,6 +133,7 @@ public class MainMenu extends AppCompatActivity {
                                 }
                             });
                             queueImage.setVisibility(View.VISIBLE);
+                            userPlace.setVisibility(View.VISIBLE);
                         }
 
                         @Override
@@ -139,7 +142,7 @@ public class MainMenu extends AppCompatActivity {
                         }
                     });
                 } else {
-                    showDefaultWindow();
+                    showDeafaultWindow();
                 }
 
             }
@@ -152,11 +155,11 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
-    private void showDefaultWindow() {
+    private void showDeafaultWindow() {
         this.queueImage.setVisibility(View.INVISIBLE);
         this.queueName.setText("");
         this.queueOwner.setText("");
-        this.userPlace.setText("");
+        this.userPlace.setVisibility(View.INVISIBLE);
     }
 
     private void loadImage() {

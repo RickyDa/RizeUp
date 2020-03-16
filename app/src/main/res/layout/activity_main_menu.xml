@@ -43,29 +43,31 @@
     <LinearLayout
         android:id="@+id/mainMenu_registeredQueue"
         android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="10dp"
         android:background="@drawable/active_queue_background">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/mainMenu_queueImage"
             android:layout_gravity="center"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             />
 
         <RelativeLayout
             android:layout_width="140dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             >
 
             <TextView
                 android:id="@+id/mainMenu_queueName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Queue Name"
                 android:textColor="#fff"
                 android:textSize="20sp"/>
 
@@ -74,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#E8E8E8"
+                android:text="Owner"
                 android:layout_below="@id/mainMenu_queueName"/>
 
         </RelativeLayout>
@@ -85,11 +88,11 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:gravity="center"
-            android:layout_margin="4dp"
             android:layout_gravity="center_vertical"
             android:textStyle="italic|bold"
             android:textColor="#000"
-            android:background="@drawable/place_background" />
+            android:background="@drawable/place_background"
+            android:text="N"/>
 
     </LinearLayout>
 
