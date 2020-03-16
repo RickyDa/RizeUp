@@ -43,7 +43,7 @@
     <LinearLayout
         android:id="@+id/mainMenu_registeredQueue"
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="@drawable/active_queue_background">
@@ -59,8 +59,8 @@
             android:layout_width="140dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
             >
 
             <TextView

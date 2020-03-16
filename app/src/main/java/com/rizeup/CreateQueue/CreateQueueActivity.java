@@ -37,7 +37,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class CreateQueueActivity extends RiZeUpActivity {
-    private static final String TAG = "CreateQueueActivity";
 
     private FirebaseUser theUser;
     private DatabaseReference databaseRef;

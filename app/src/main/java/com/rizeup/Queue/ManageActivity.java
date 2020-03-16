@@ -18,7 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rizeup.R;
-import com.rizeup.models.QueueParticipant;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
@@ -31,11 +30,11 @@ public class ManageActivity extends RiZeUpQueueActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage);
 
-        this.queueName = findViewById(R.id.manage_queueName);
-        this.queueImage = findViewById(R.id.manage_QueueImage);
+        this.queueNameTextView = findViewById(R.id.manage_queueName);
+        this.queueImageView = findViewById(R.id.manage_QueueImage);
 
         this.participants = new ArrayList<>();
-        this.queue = findViewById(R.id.manage_queueRecyclerView);
+        this.queueRecyclerView = findViewById(R.id.manage_queueRecyclerView);
         this.loaded = false;
         this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         this.usersRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
@@ -88,6 +87,6 @@ public class ManageActivity extends RiZeUpQueueActivity {
             }
         };
 
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(this.queue);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(this.queueRecyclerView);
     }
 }

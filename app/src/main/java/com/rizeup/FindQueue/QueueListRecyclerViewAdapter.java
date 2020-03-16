@@ -1,38 +1,20 @@
 package com.rizeup.FindQueue;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,27 +23,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rizeup.models.RiZeUpQueue;
-import com.rizeup.models.QueueParticipant;
 import com.rizeup.Queue.QueueActivity;
 import com.rizeup.R;
+import com.rizeup.models.QueueParticipant;
+import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
-import java.util.Map;
-
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueListRecyclerViewAdapter.QueueHolder> {
 
-    private static final String TAG = "QueueListRecyclerViewAd";
-
     private AppCompatActivity mContext;
     private ArrayList<RiZeUpQueue> queues;
-    private Dialog mapDialog;
 
-    public QueueListRecyclerViewAdapter(AppCompatActivity mContext, ArrayList<RiZeUpQueue> queues) {
+    QueueListRecyclerViewAdapter(AppCompatActivity mContext, ArrayList<RiZeUpQueue> queues) {
         this.mContext = mContext;
         this.queues = queues;
     }
@@ -70,8 +48,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
     @Override
     public QueueHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_queueitem, parent, false);
-        final QueueHolder qh = new QueueListRecyclerViewAdapter.QueueHolder(view);
-        return qh;
+        return new QueueHolder(view);
     }
 
     @Override
@@ -117,7 +94,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         return queues.size();
     }
 
-    public class QueueHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class QueueHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CircleImageView queueImage;
         TextView queueName;
@@ -130,7 +107,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         DatabaseReference qRef;
         DatabaseReference userRef;
 
-        public QueueHolder(@NonNull View itemView) {
+        QueueHolder(@NonNull View itemView) {
             super(itemView);
             context = itemView.getContext();
             queueImage = itemView.findViewById(R.id.queue_image);
@@ -142,7 +119,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
             qRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
-            userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+            userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         }
 
         @Override
@@ -151,7 +128,8 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChild(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG)) {
-                        Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
+                        if(!dataSnapshot.child(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).getValue().equals(id))
+                            Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
                         startQueueActivity();
                     } else {
                         registerUser();
@@ -166,7 +144,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         }
 
         private void registerUser() {
-            final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
             final DatabaseReference queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES).child(id).child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
             queueRef.child(userId).setValue(new QueueParticipant(userId, System.currentTimeMillis())).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
