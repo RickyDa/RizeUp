@@ -22,7 +22,6 @@ public class QueueActivity extends RiZeUpQueueActivity {
         setContentView(R.layout.activity_queue);
         Intent intent = getIntent();
         String queueId = intent.getStringExtra(FindQueueActivity.QID_EXTRA);
-        Toast.makeText(getApplicationContext(), queueId, Toast.LENGTH_SHORT).show();
 
         this.loaded = false;
         this.participants = new ArrayList<>();
