@@ -22,7 +22,6 @@
         <activity android:name=".MainMenu.MainMenu" />
         <activity android:name=".CreateQueue.CreateQueueActivity" />
         <activity android:name=".FindQueue.FindQueueActivity" />
-        <activity android:name=".Login.LoginActivity" />
         <activity android:name=".SignUp.SignUpActivity" />
 
         <provider

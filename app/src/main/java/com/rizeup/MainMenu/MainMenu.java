@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rizeup.CreateQueue.CreateQueueActivity;
 import com.rizeup.FindQueue.FindQueueActivity;
+import com.rizeup.MainActivity;
 import com.rizeup.Queue.ManageActivity;
 import com.rizeup.Queue.QueueActivity;
 import com.rizeup.R;
@@ -33,28 +34,29 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainMenu extends AppCompatActivity {
     private static final String TAG = "MainMenu.MainMenuActivity";
 
+    private FirebaseAuth mAuth;
     private FirebaseUser theUser;
     private DatabaseReference userDatabaseRef;
     private DatabaseReference queue;
     private CircleImageView profileImg, queueImage;
     private TextView queueName, queueOwner, userPlace;
     private String queueOwnerUid;
+    private Intent loginPage;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-        this.theUser = FirebaseAuth.getInstance().getCurrentUser();
+        this.mAuth = FirebaseAuth.getInstance();
+        this.theUser = mAuth.getCurrentUser();
         this.queue = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
         this.userDatabaseRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + theUser.getUid());
-
         this.profileImg = findViewById(R.id.userProfileImage);
         this.queueImage = findViewById(R.id.mainMenu_queueImage);
         this.queueName = findViewById(R.id.mainMenu_queueName);
         this.queueOwner = findViewById(R.id.mainMenu_queueOwner);
         this.userPlace = findViewById(R.id.mainMenu_queuePlace);
-
+        this.loginPage = new Intent(this, MainActivity.class);
 
         loadImage();
         loadRegisteredQueue();
@@ -63,6 +65,15 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent findQueue = new Intent(getApplicationContext(), FindQueueActivity.class);
                 startActivity(findQueue);
+            }
+        });
+
+        findViewById(R.id.logoutBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Toast.makeText(getApplicationContext(), "Log out successful!", Toast.LENGTH_LONG).show();
+                startActivity(loginPage);
             }
         });
 
