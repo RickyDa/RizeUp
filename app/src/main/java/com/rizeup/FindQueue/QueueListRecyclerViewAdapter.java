@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -22,26 +23,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rizeup.models.RiZeUpQueue;
-import com.rizeup.models.QueueParticipant;
 import com.rizeup.Queue.QueueActivity;
 import com.rizeup.R;
-import com.rizeup.models.RiZeUpUser;
+import com.rizeup.models.QueueParticipant;
+import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
-
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueListRecyclerViewAdapter.QueueHolder> {
 
-    private static final String TAG = "QueueListRecyclerViewAd";
-
-    private Context mContext;
+    private AppCompatActivity mContext;
     private ArrayList<RiZeUpQueue> queues;
 
-    public QueueListRecyclerViewAdapter(Context mContext, ArrayList<RiZeUpQueue> queues) {
+    QueueListRecyclerViewAdapter(AppCompatActivity mContext, ArrayList<RiZeUpQueue> queues) {
         this.mContext = mContext;
         this.queues = queues;
     }
@@ -50,11 +48,11 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
     @Override
     public QueueHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_queueitem, parent, false);
-        return new QueueListRecyclerViewAdapter.QueueHolder(view);
+        return new QueueHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final QueueHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final QueueHolder holder, final int position) {
         final RiZeUpQueue q = queues.get(position);
         holder.queueName.setText(q.getName());
         holder.queueOwner.setText(q.getOwnerName());
@@ -62,15 +60,6 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         if (!(q.getImageUrl().trim().equals("")))
             Glide.with(mContext).asBitmap().load(queues.get(position).getImageUrl()).into(holder.queueImage);
 
-        holder.queueLocation.setOnClickListener(new View.OnClickListener() {
-            //TODO: change action to open MAP
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "lat: " + q.getLat() + "lng:" + q.getLng(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-//        holder.queueNumOfParticipant.setText(String.valueOf(q.getParticipants().size()));
         holder.qRef = holder.qRef.child(q.getOwnerUid() + "/" + FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
         holder.qRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -83,6 +72,20 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
 
             }
         });
+
+        holder.queueLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog(queues.get(position).getLat(), queues.get(position).getLng(), queues.get(position).getName(), queues.get(position).getImageUrl());
+            }
+        });
+
+
+    }
+
+    private void openDialog(double lat, double lng, String name, String imageUrl) {
+        MapDialog md = new MapDialog(lat, lng, name, imageUrl);
+        md.show(mContext.getSupportFragmentManager(),"QUEUE");
     }
 
 
@@ -91,7 +94,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         return queues.size();
     }
 
-    public class QueueHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class QueueHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CircleImageView queueImage;
         TextView queueName;
@@ -104,7 +107,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         DatabaseReference qRef;
         DatabaseReference userRef;
 
-        public QueueHolder(@NonNull View itemView) {
+        QueueHolder(@NonNull View itemView) {
             super(itemView);
             context = itemView.getContext();
             queueImage = itemView.findViewById(R.id.queue_image);
@@ -116,7 +119,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
             qRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
-            userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+            userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         }
 
         @Override
@@ -125,7 +128,8 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChild(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG)) {
-                        Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
+                        if(!dataSnapshot.child(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).getValue().equals(id))
+                            Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
                         startQueueActivity();
                     } else {
                         registerUser();
@@ -140,7 +144,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         }
 
         private void registerUser() {
-            final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
             final DatabaseReference queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES).child(id).child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
             queueRef.child(userId).setValue(new QueueParticipant(userId, System.currentTimeMillis())).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

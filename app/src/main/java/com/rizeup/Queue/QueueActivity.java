@@ -2,10 +2,12 @@ package com.rizeup.Queue;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rizeup.FindQueue.FindQueueActivity;
+import com.rizeup.FindQueue.MapDialog;
 import com.rizeup.R;
 import com.rizeup.utils.FirebaseReferences;
 
@@ -22,18 +24,29 @@ public class QueueActivity extends RiZeUpQueueActivity {
         setContentView(R.layout.activity_queue);
         Intent intent = getIntent();
         String queueId = intent.getStringExtra(FindQueueActivity.QID_EXTRA);
-        Toast.makeText(getApplicationContext(), queueId, Toast.LENGTH_SHORT).show();
 
         this.loaded = false;
         this.participants = new ArrayList<>();
-        this.queue = findViewById(R.id.userQueue_recyclerView);
-        this.queueImage = findViewById(R.id.userQueue_image);
-        this.queueName = findViewById(R.id.userQueue_name);
+        this.queueRecyclerView = findViewById(R.id.userQueue_recyclerView);
+        this.queueImageView = findViewById(R.id.userQueue_image);
+        this.queueNameTextView = findViewById(R.id.userQueue_name);
 
         this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES + "/" + queueId);
         this.participantsRef = queueRef.child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
+        FloatingActionButton fab = findViewById(R.id.userQueue_location);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
         initQueue();
 
+    }
+
+    private void openDialog() {
+        MapDialog md = new MapDialog(queueLat, queueLng, queueName, queueImageUrl);
+        md.show(getSupportFragmentManager(), "QUEUE");
     }
 
 }
