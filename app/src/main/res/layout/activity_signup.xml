@@ -32,7 +32,7 @@
                 android:id="@+id/captureBtn"
                 android:gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/ic_camera_alt_black_24dp"
                 android:text="@string/capture"
@@ -42,7 +42,7 @@
                 android:id="@+id/uploadBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
                 app:icon="@drawable/ic_archive_black_24dp"
                 android:text="@string/upload" />
         </LinearLayout>
