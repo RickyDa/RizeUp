@@ -2,4 +2,7 @@
     <string name="app_name">RizeUp</string>
     <string name="queue_name">Queue Name</string>
     <string name="title_activity_maps">Map</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="welcome_back_to_rizeup">Welcome back to RizeUp</string>
 </resources>

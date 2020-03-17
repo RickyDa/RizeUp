@@ -1,6 +1,8 @@
 package com.rizeup.Queue;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,14 +35,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ParticipantView> {
 
-    private Context mContext;
+    private AppCompatActivity mContext;
     private ArrayList<QueueParticipant> participant;
     private DatabaseReference userRef;
+    private DatabaseReference queueRef;
 
-    public ParticipantRecyclerViewAdapter(Context mContext, ArrayList<QueueParticipant> participant) {
+    public ParticipantRecyclerViewAdapter(AppCompatActivity mContext, ArrayList<QueueParticipant> participant) {
         this.mContext = mContext;
         this.participant = participant;
         this.userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
+        this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
+
 
     }
 
@@ -55,15 +64,23 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
                 final RiZeUpUser user = dataSnapshot.getValue(RiZeUpUser.class);
                 holder.participantName.setText(user.getName());
                 holder.participantNumber.setText(String.valueOf(position));
-                if (user.getImageUri() == null) {
-                    holder.image.setImageResource(R.drawable.defaultimage);
+                if (user.getImageUri().trim().equals("")) {
+                    Glide.with(mContext).asBitmap().load(R.drawable.defaultimage).into(holder.image);
                 } else {
                     Glide.with(mContext).asBitmap().load(user.getImageUri()).into(holder.image);
                 }
 
                 if(user.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    // TODO change background
-                    holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);
+                    FloatingActionButton fab= holder.participantLayout.findViewById(R.id.participant_deleteBtn);
+                    fab.setVisibility(View.VISIBLE);
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openApprovalDialog(holder);
+                        }
+                    });
+//                    // TODO change background
+//                    holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);
                 }
             }
 
@@ -74,6 +91,58 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
         });
 
 
+    }
+
+    private void openApprovalDialog(final ParticipantView holder) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+        builder.setTitle("Are you sure?").setMessage("By pressing \"yes\" you will be out of the queue.").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteUser(holder);
+            }
+        }).setNegativeButton("no", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+            }
+        });
+        builder.create().show();
+    }
+
+    private void deleteUser(final ParticipantView holder) {
+        this.userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/"+FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                deleteFromQueue(dataSnapshot.getValue(String.class),holder);
+                dataSnapshot.getRef().removeValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void deleteFromQueue(String value, ParticipantView holder) {
+        this.queueRef.child(value+"/"+FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        mContext.finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
