@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +32,6 @@ import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
 
-import org.w3c.dom.Text;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainMenu extends AppCompatActivity implements ChildEventListener {
@@ -42,10 +42,12 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
     private DatabaseReference userDatabaseRef;
     private DatabaseReference queue;
     private CircleImageView profileImg, queueImage;
-    private TextView queueName, queueOwner, userPlace , userHelloTxt;
+    private TextView queueName, queueOwner, userPlace, userHelloTxt;
     private String queueOwnerUid;
     private Intent loginPage;
     private ProgressDialog loading;
+    private LinearLayout registeredQueueCard;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
         loading.show();
 
         initReferences();
+        this.profileImg = findViewById(R.id.userProfileImage);
         this.queueImage = findViewById(R.id.mainMenu_queueImage);
         this.queueName = findViewById(R.id.mainMenu_queueName);
         this.queueOwner = findViewById(R.id.mainMenu_queueOwner);
@@ -106,7 +109,8 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
 
             }
         });
-        findViewById(R.id.mainMenu_registeredQueue).setOnClickListener(new View.OnClickListener() {
+        this.registeredQueueCard = findViewById(R.id.mainMenu_registeredQueue);
+        this.registeredQueueCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), QueueActivity.class);
@@ -133,7 +137,7 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 RiZeUpUser user = dataSnapshot.getValue(RiZeUpUser.class);
                 if (user.getRegisteredQ() != null) {
-
+                    registeredQueueCard.setClickable(true);
                     queue.child(user.getRegisteredQ()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -171,7 +175,7 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
                         }
                     });
                 } else {
-                    showDeafaultWindow();
+                    showDefaultWindow();
                 }
 
             }
@@ -184,7 +188,8 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
 
     }
 
-    private void showDeafaultWindow() {
+    private void showDefaultWindow() {
+        this.registeredQueueCard.setClickable(false);
         this.queueImage.setVisibility(View.INVISIBLE);
         this.queueName.setText("");
         this.queueOwner.setText("");
@@ -221,7 +226,7 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        if(loading.isShowing())
+        if (loading.isShowing())
             loading.dismiss();
     }
 

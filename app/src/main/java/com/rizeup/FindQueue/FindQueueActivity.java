@@ -21,7 +21,7 @@ import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
 
-public class FindQueueActivity extends AppCompatActivity {
+public class FindQueueActivity extends AppCompatActivity implements ValueEventListener {
 
     public static final String QID_EXTRA = "qid";
 
@@ -40,24 +40,23 @@ public class FindQueueActivity extends AppCompatActivity {
 
         DatabaseReference databaseQueueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
 
-        databaseQueueRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    RiZeUpQueue q = snapshot.getValue(RiZeUpQueue.class);
-                    if(!qList.contains(q))
-                        qList.add(q);
-            }
-                qListAdapter = new QueueListRecyclerViewAdapter(FindQueueActivity.this, qList);
-                queueListRecyclerView.setAdapter(qListAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        databaseQueueRef.addValueEventListener(this);
     }
 
 
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            RiZeUpQueue q = snapshot.getValue(RiZeUpQueue.class);
+            if(!qList.contains(q))
+                qList.add(q);
+        }
+        qListAdapter = new QueueListRecyclerViewAdapter(FindQueueActivity.this, qList);
+        queueListRecyclerView.setAdapter(qListAdapter);
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
 }
