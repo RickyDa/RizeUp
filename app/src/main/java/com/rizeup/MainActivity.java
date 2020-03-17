@@ -13,16 +13,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.rizeup.ForgotPassword.ForgotPasswordActivity;
 import com.rizeup.MainMenu.MainMenu;
 import com.rizeup.SignUp.SignUpActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends RiZeUpActivity {
     private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth;
     private Button loginBtn, signUpBtn , forgotPassBtn;
     private EditText email, password;
-    private Intent signUp, homePage;
+    private Intent signUp, homePage,forgotPassPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.et_password);
         homePage = new Intent(this, MainMenu.class);
         signUp = new Intent(this, SignUpActivity.class);
+        forgotPassPage = new Intent(this, ForgotPasswordActivity.class);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     startActivity(signUp);
+            }
+        });
+        forgotPassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(forgotPassPage);
             }
         });
     }
