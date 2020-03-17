@@ -75,6 +75,7 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 Toast.makeText(getApplicationContext(), "Log out successful!", Toast.LENGTH_LONG).show();
+                finish();
                 startActivity(loginPage);
             }
         });
