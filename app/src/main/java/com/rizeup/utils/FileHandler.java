@@ -21,8 +21,7 @@ public class FileHandler {
         String timeStamp = Calendar.getInstance().getTime().toString().replace(" ", "_");
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        return image;
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 
 
