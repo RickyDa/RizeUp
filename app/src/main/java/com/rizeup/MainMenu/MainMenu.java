@@ -203,8 +203,10 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String uri = dataSnapshot.getValue(RiZeUpUser.class).getImageUri();
-                    if (uri != null)
+                    if (!uri.trim().equals(""))
                         Glide.with(getApplicationContext()).load(uri).into(profileImg);
+                    else
+                        Glide.with(getApplicationContext()).load(R.drawable.defaultimage).into(profileImg);
                 }
 
                 @Override

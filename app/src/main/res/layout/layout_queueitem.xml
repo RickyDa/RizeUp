@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/queue_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -7,52 +8,62 @@
     android:background="@drawable/participant_border"
     android:orientation="horizontal">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/queue_image"
-        android:layout_width="90dp"
-        android:layout_margin="10dp"
-        android:layout_height="90dp"
-        android:layout_gravity="center"
-        android:src='@mipmap/ic_launcher_round' />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/queue_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/queue_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Queue Name"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/queue_owner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/queue_name"
-            android:text="Owner"
+            android:textSize="12sp"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/queueItemBtn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/location_button"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-        />
+        <Button
+            android:id="@+id/queueItemBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            />
+    </LinearLayout>
+
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/place_background">
 
         <TextView
@@ -60,7 +71,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="N"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="italic|bold" />
     </RelativeLayout>
