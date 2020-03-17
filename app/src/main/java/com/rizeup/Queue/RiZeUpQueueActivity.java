@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.rizeup.RiZeUpActivity;
 import com.rizeup.models.QueueParticipant;
 import com.rizeup.models.RiZeUpQueue;
 
@@ -61,7 +62,7 @@ public class RiZeUpQueueActivity extends AppCompatActivity {
                                 }
                             }
                             if (!loaded) {
-                                adapter = new ParticipantRecyclerViewAdapter(getApplicationContext(), participants);
+                                adapter = new ParticipantRecyclerViewAdapter(RiZeUpQueueActivity.this, participants);
                                 queueRecyclerView.setAdapter(adapter);
                                 loaded = true;
                             } else {

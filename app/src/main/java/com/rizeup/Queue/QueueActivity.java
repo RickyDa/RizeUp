@@ -52,4 +52,6 @@ public class QueueActivity extends RiZeUpQueueActivity {
         md.show(getSupportFragmentManager(), "QUEUE");
     }
 
+
+
 }
