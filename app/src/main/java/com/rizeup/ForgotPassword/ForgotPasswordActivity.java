@@ -1,6 +1,5 @@
 package com.rizeup.ForgotPassword;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,22 +13,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.rizeup.MainActivity;
-import com.rizeup.MainMenu.MainMenu;
 import com.rizeup.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private Button sendBtn;
     private EditText email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
         mAuth = FirebaseAuth.getInstance();
-        sendBtn = (Button) findViewById(R.id.btn_send);
-        email = (EditText) findViewById(R.id.et_email);
+        Button sendBtn = findViewById(R.id.btn_send);
+        email = findViewById(R.id.et_email);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

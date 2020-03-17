@@ -1,14 +1,12 @@
 package com.rizeup.Queue;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +28,7 @@ import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,7 +39,7 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
     private DatabaseReference userRef;
     private DatabaseReference queueRef;
 
-    public ParticipantRecyclerViewAdapter(AppCompatActivity mContext, ArrayList<QueueParticipant> participant) {
+    ParticipantRecyclerViewAdapter(AppCompatActivity mContext, ArrayList<QueueParticipant> participant) {
         this.mContext = mContext;
         this.participant = participant;
         this.userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
@@ -62,25 +61,25 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final RiZeUpUser user = dataSnapshot.getValue(RiZeUpUser.class);
-                holder.participantName.setText(user.getName());
-                holder.participantNumber.setText(String.valueOf(position));
-                if (user.getImageUri().trim().equals("")) {
-                    Glide.with(mContext).asBitmap().load(R.drawable.defaultimage).into(holder.image);
-                } else {
-                    Glide.with(mContext).asBitmap().load(user.getImageUri()).into(holder.image);
-                }
+                if(user != null) {
+                    holder.participantName.setText(user.getName());
+                    holder.participantNumber.setText(String.valueOf(position));
+                    if (user.getImageUri().trim().equals("")) {
+                        Glide.with(mContext).asBitmap().load(R.drawable.defaultimage).into(holder.image);
+                    } else {
+                        Glide.with(mContext).asBitmap().load(user.getImageUri()).into(holder.image);
+                    }
 
-                if(user.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    FloatingActionButton fab= holder.participantLayout.findViewById(R.id.participant_deleteBtn);
-                    fab.setVisibility(View.VISIBLE);
-                    fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openApprovalDialog(holder);
-                        }
-                    });
-//                    // TODO change background
-//                    holder.participantLayout.setBackgroundColor(R.drawable.googleg_standard_color_18);
+                    if (user.getUid().equals(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())) {
+                        FloatingActionButton fab = holder.participantLayout.findViewById(R.id.participant_deleteBtn);
+                        fab.setVisibility(View.VISIBLE);
+                        fab.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                openApprovalDialog(holder);
+                            }
+                        });
+                    }
                 }
             }
 
@@ -98,7 +97,7 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
         builder.setTitle("Are you sure?").setMessage("By pressing \"yes\" you will be out of the queue.").setPositiveButton("yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteUser(holder);
+                deleteUser();
             }
         }).setNegativeButton("no", new DialogInterface.OnClickListener() {
             @Override
@@ -109,11 +108,11 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
         builder.create().show();
     }
 
-    private void deleteUser(final ParticipantView holder) {
-        this.userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/"+FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void deleteUser() {
+        this.userRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/"+FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                deleteFromQueue(dataSnapshot.getValue(String.class),holder);
+                deleteFromQueue(dataSnapshot.getValue(String.class));
                 dataSnapshot.getRef().removeValue();
             }
 
@@ -126,8 +125,10 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
 
     }
 
-    private void deleteFromQueue(String value, ParticipantView holder) {
-        this.queueRef.child(value+"/"+FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void deleteFromQueue(String value) {
+        this.queueRef.child(value+"/"+FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS)
+                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {

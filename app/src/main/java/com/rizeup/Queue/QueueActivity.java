@@ -18,8 +18,6 @@ import java.util.ArrayList;
 public class QueueActivity extends RiZeUpQueueActivity {
 
 
-    private static final String TAG = "Queue.QueueActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
