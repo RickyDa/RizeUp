@@ -39,7 +39,7 @@ public class MainMenu extends AppCompatActivity {
     private DatabaseReference userDatabaseRef;
     private DatabaseReference queue;
     private CircleImageView profileImg, queueImage;
-    private TextView queueName, queueOwner, userPlace;
+    private TextView queueName, queueOwner, userPlace , userHelloTxt;
     private String queueOwnerUid;
     private Intent loginPage;
     @Override
@@ -56,8 +56,10 @@ public class MainMenu extends AppCompatActivity {
         this.queueName = findViewById(R.id.mainMenu_queueName);
         this.queueOwner = findViewById(R.id.mainMenu_queueOwner);
         this.userPlace = findViewById(R.id.mainMenu_queuePlace);
+        this.userHelloTxt = findViewById(R.id.userHelloTxt);
         this.loginPage = new Intent(this, MainActivity.class);
 
+        userHelloTxt.setText("Hi, " + theUser.getDisplayName().toString());
         loadImage();
         loadRegisteredQueue();
         findViewById(R.id.findBtn).setOnClickListener(new View.OnClickListener() {
