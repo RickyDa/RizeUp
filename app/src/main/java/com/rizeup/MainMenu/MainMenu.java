@@ -1,8 +1,10 @@
 package com.rizeup.MainMenu;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +34,7 @@ import org.w3c.dom.Text;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainMenu extends AppCompatActivity {
+public class MainMenu extends AppCompatActivity implements ChildEventListener {
     private static final String TAG = "MainMenu.MainMenuActivity";
 
     private FirebaseAuth mAuth;
@@ -42,16 +45,19 @@ public class MainMenu extends AppCompatActivity {
     private TextView queueName, queueOwner, userPlace , userHelloTxt;
     private String queueOwnerUid;
     private Intent loginPage;
+    private ProgressDialog loading;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        this.mAuth = FirebaseAuth.getInstance();
-        this.theUser = mAuth.getCurrentUser();
-        this.queue = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
-        this.userDatabaseRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + theUser.getUid());
-        this.profileImg = findViewById(R.id.userProfileImage);
+
+        loading = new ProgressDialog(this);
+        loading.setCancelable(false);
+        loading.setInverseBackgroundForced(false);
+        loading.show();
+
+        initReferences();
         this.queueImage = findViewById(R.id.mainMenu_queueImage);
         this.queueName = findViewById(R.id.mainMenu_queueName);
         this.queueOwner = findViewById(R.id.mainMenu_queueOwner);
@@ -110,6 +116,15 @@ public class MainMenu extends AppCompatActivity {
         });
 
 
+    }
+
+    private void initReferences() {
+        this.mAuth = FirebaseAuth.getInstance();
+        this.theUser = mAuth.getCurrentUser();
+        this.queue = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
+        this.userDatabaseRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS + "/" + theUser.getUid());
+        this.queue.addChildEventListener(this);
+        this.userDatabaseRef.addChildEventListener(this);
     }
 
     private void loadRegisteredQueue() {
@@ -202,5 +217,31 @@ public class MainMenu extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadRegisteredQueue();
+    }
+
+    @Override
+    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        if(loading.isShowing())
+            loading.dismiss();
+    }
+
+    @Override
+    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+    }
+
+    @Override
+    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
     }
 }
