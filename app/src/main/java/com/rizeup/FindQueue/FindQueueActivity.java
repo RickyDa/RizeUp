@@ -1,15 +1,18 @@
 package com.rizeup.FindQueue;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,18 +24,25 @@ import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
 
-public class FindQueueActivity extends AppCompatActivity implements ValueEventListener {
+public class FindQueueActivity extends AppCompatActivity implements ValueEventListener, ChildEventListener {
 
     public static final String QID_EXTRA = "qid";
 
     private RecyclerView queueListRecyclerView;
     private QueueListRecyclerViewAdapter qListAdapter;
     private ArrayList<RiZeUpQueue> qList;
+    private ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_queue);
+
+        this.loading = new ProgressDialog(this);
+        this.loading.setCancelable(false);
+        this.loading.setInverseBackgroundForced(false);
+        this.loading.show();
+
         this.qList = new ArrayList<>();
         this.queueListRecyclerView = findViewById(R.id.recyclerViewQList);
         this.queueListRecyclerView.setHasFixedSize(true);
@@ -41,6 +51,7 @@ public class FindQueueActivity extends AppCompatActivity implements ValueEventLi
         DatabaseReference databaseQueueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
 
         databaseQueueRef.addValueEventListener(this);
+        databaseQueueRef.addChildEventListener(this);
     }
 
 
@@ -53,6 +64,28 @@ public class FindQueueActivity extends AppCompatActivity implements ValueEventLi
         }
         qListAdapter = new QueueListRecyclerViewAdapter(FindQueueActivity.this, qList);
         queueListRecyclerView.setAdapter(qListAdapter);
+    }
+
+    @Override
+    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        if(loading.isShowing()) {
+            loading.dismiss();
+        }
+    }
+
+    @Override
+    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+    }
+
+    @Override
+    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
     }
 
     @Override
