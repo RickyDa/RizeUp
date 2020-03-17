@@ -44,8 +44,6 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
         this.participant = participant;
         this.userRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
         this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES);
-
-
     }
 
     @NonNull
@@ -109,7 +107,9 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
     }
 
     private void deleteUser() {
-        this.userRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/"+FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).addListenerForSingleValueEvent(new ValueEventListener() {
+        this.userRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()+"/"
+                +FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 deleteFromQueue(dataSnapshot.getValue(String.class));

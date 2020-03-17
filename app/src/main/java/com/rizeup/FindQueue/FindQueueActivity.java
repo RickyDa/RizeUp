@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,8 +56,9 @@ public class FindQueueActivity extends AppCompatActivity implements ValueEventLi
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
             RiZeUpQueue q = snapshot.getValue(RiZeUpQueue.class);
-            if(!qList.contains(q))
+            if (!(q.getOwnerUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) || qList.contains(q))) {
                 qList.add(q);
+            }
         }
         QueueListRecyclerViewAdapter qListAdapter = new QueueListRecyclerViewAdapter(FindQueueActivity.this, qList);
         queueListRecyclerView.setAdapter(qListAdapter);
@@ -64,7 +66,7 @@ public class FindQueueActivity extends AppCompatActivity implements ValueEventLi
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        if(loading.isShowing()) {
+        if (loading.isShowing()) {
             loading.dismiss();
         }
     }
