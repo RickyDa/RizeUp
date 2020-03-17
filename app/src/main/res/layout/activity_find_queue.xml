@@ -4,40 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FindQueue.FindQueueActivity"
-    android:id="@+id/findQueueLayout"
-    android:padding="30dp"
-    android:orientation="vertical">
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context=".FindQueue.FindQueueActivity">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAlignment="center"
-        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@android:color/black"
-        android:layout_margin="10dp"
-        android:textSize="32sp"
-        android:text="Active Queues"/>
-
+        android:layout_marginVertical="20dp"
+        android:text="Active Queues"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="25dp"
+        android:textStyle="bold" />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
-        android:padding="20dp"
-        android:background="@drawable/queue_container_back">
+        android:background="@drawable/border"
+        android:padding="20dp">
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewQList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recyclerViewQList"/>
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+        android:layout_height="wrap_content" />
 </LinearLayout>
