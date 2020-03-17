@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:drawableStart="@drawable/ic_archive_black_24dp"
-                android:text="change" />
+                android:text="@string/change" />
 
 
         </LinearLayout>
@@ -52,14 +52,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
-            android:hint="Enter Queue name" />
+            android:hint="@string/enter_queue_name" />
 
         <Button
             android:id="@+id/createQBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Create" />
+            android:text="@string/create" />
 
     </LinearLayout>
 

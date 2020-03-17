@@ -5,4 +5,25 @@
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="welcome_back_to_rizeup">Welcome back to RizeUp</string>
+    <string name="change">Change</string>
+    <string name="enter_queue_name">Enter Queue Name</string>
+    <string name="create">Create</string>
+    <string name="active_queues">Active Queues</string>
+    <string name="forgot_password">Forgot password ?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="send">Send</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="logout">Logout</string>
+    <string name="find_queue">Find Queue</string>
+    <string name="manage_queue">Manage Queue</string>
+    <string name="capture">Capture</string>
+    <string name="upload">Upload</string>
+    <string name="full_name">Full Name</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="register" >Register</string>
+    <string name="back" >Back</string>
+
+
 </resources>

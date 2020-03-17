@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="20dp"
-                    android:text="Manage Queue"
+                    android:text="@string/manage_queue"
                     app:strokeColor="@color/colorPrimaryDark" />
 
             </LinearLayout>
@@ -97,7 +97,7 @@
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:text="Logout"
+                    android:text="@string/logout"
                     app:strokeColor="@color/colorPrimaryDark" />
             </LinearLayout>
         </LinearLayout>
@@ -135,7 +135,7 @@
                     android:id="@+id/mainMenu_queueName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#fff"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp" />
 
                 <TextView
@@ -143,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mainMenu_queueName"
-                    android:textColor="#E8E8E8" />
+                    android:textColor="@color/colorWhiteGray" />
 
             </RelativeLayout>
 

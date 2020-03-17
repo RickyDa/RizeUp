@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@android:drawable/ic_delete"
-        app:backgroundTint="#A83232"
+        app:backgroundTint="@android:color/holo_red_dark"
         app:elevation="1dp"
         app:fabSize="mini"
         android:layout_margin="3dp"

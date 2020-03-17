@@ -13,7 +13,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:background="#232323"
+        android:background="@color/colorAccent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:layout_marginTop="50dp"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="QUEUE NAME"
             android:textSize="24sp"
-            android:textColor="#ffff"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginTop="50dp"
@@ -41,9 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_map"
-            android:text="BACK"
+            android:text="@string/back"
             android:layout_marginBottom="10dp"
-            android:textColor="#fff"
+            android:textColor="@android:color/white"
             android:textStyle="bold"/>
     </LinearLayout>
 
