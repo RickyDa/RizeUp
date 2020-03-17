@@ -79,15 +79,19 @@ public class CreateQueueActivity extends RiZeUpActivity {
         findViewById(R.id.createQBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mUploadTask != null && mUploadTask.isInProgress()) {
-                    Toast.makeText(getApplicationContext(), "Creation in progress", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (mEditQueueName.getText().toString().trim().equals("")) {
-                        Toast.makeText(getApplicationContext(), "***MUST ENTER QUEUE NAME***", Toast.LENGTH_SHORT).show();
+                if (imageUri != null) {
+                    if (mUploadTask != null && mUploadTask.isInProgress()) {
+                        Toast.makeText(getApplicationContext(), "Creation in progress", Toast.LENGTH_SHORT).show();
                     } else {
-                        String qKey = databaseRef.push().getKey();
-                        uploadQueueImage(qKey);
+                        if (mEditQueueName.getText().toString().trim().equals("")) {
+                            Toast.makeText(getApplicationContext(), "***MUST ENTER QUEUE NAME***", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String qKey = databaseRef.push().getKey();
+                            uploadQueueImage(qKey);
+                        }
                     }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Must Select Image For the QUEUE to proceed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
