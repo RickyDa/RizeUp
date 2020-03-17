@@ -1,17 +1,17 @@
 package com.rizeup.MainMenu;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +32,8 @@ import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.models.RiZeUpUser;
 import com.rizeup.utils.FirebaseReferences;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainMenu extends AppCompatActivity implements ChildEventListener {
@@ -42,12 +44,15 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
     private DatabaseReference userDatabaseRef;
     private DatabaseReference queue;
     private CircleImageView profileImg, queueImage;
-    private TextView queueName, queueOwner, userPlace, userHelloTxt;
+    private TextView queueName;
+    private TextView queueOwner;
+    private TextView userPlace;
     private String queueOwnerUid;
     private Intent loginPage;
     private ProgressDialog loading;
     private LinearLayout registeredQueueCard;
 
+    @SuppressLint("SetTextI18n")
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +70,10 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
         this.queueName = findViewById(R.id.mainMenu_queueName);
         this.queueOwner = findViewById(R.id.mainMenu_queueOwner);
         this.userPlace = findViewById(R.id.mainMenu_queuePlace);
-        this.userHelloTxt = findViewById(R.id.userHelloTxt);
+        TextView userHelloTxt = findViewById(R.id.userHelloTxt);
         this.loginPage = new Intent(this, MainActivity.class);
 
-        userHelloTxt.setText("Hi, " + theUser.getDisplayName().toString());
+        userHelloTxt.setText("Hi, " + theUser.getDisplayName());
         loadImage();
         loadRegisteredQueue();
         findViewById(R.id.findBtn).setOnClickListener(new View.OnClickListener() {
@@ -136,37 +141,39 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 RiZeUpUser user = dataSnapshot.getValue(RiZeUpUser.class);
-                if (user.getRegisteredQ() != null) {
+                if (user != null && user.getRegisteredQ() != null) {
                     registeredQueueCard.setClickable(true);
                     queue.child(user.getRegisteredQ()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             RiZeUpQueue q = dataSnapshot.getValue(RiZeUpQueue.class);
-                            queueOwnerUid = q.getOwnerUid();
-                            queueName.setText(q.getName());
-                            queueOwner.setText(q.getOwnerName());
-                            Glide.with(getApplicationContext()).load(q.getImageUrl()).into(queueImage);
-                            queue.child(queueOwnerUid + "/" + FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS).orderByChild("timeStamp").addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    int count = 1;
-                                    for (DataSnapshot s : dataSnapshot.getChildren()) {
-                                        RiZeUpUser u = s.getValue(RiZeUpUser.class);
-                                        if (u.getUid().equals(theUser.getUid())) {
-                                            userPlace.setText(String.valueOf(count));
-                                            break;
+                            if (q != null) {
+                                queueOwnerUid = q.getOwnerUid();
+                                queueName.setText(q.getName());
+                                queueOwner.setText(q.getOwnerName());
+                                Glide.with(getApplicationContext()).load(q.getImageUrl()).into(queueImage);
+                                queue.child(queueOwnerUid + "/" + FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS).orderByChild("timeStamp").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        int count = 1;
+                                        for (DataSnapshot s : dataSnapshot.getChildren()) {
+                                            RiZeUpUser u = s.getValue(RiZeUpUser.class);
+                                            if (u != null && u.getUid().equals(theUser.getUid())) {
+                                                userPlace.setText(String.valueOf(count));
+                                                break;
+                                            }
+                                            count++;
                                         }
-                                        count++;
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                }
-                            });
-                            queueImage.setVisibility(View.VISIBLE);
-                            userPlace.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                                queueImage.setVisibility(View.VISIBLE);
+                                userPlace.setVisibility(View.VISIBLE);
+                            }
                         }
 
                         @Override
@@ -202,7 +209,7 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
             users.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String uri = dataSnapshot.getValue(RiZeUpUser.class).getImageUri();
+                    String uri = Objects.requireNonNull(dataSnapshot.getValue(RiZeUpUser.class)).getImageUri();
                     if (!uri.trim().equals(""))
                         Glide.with(getApplicationContext()).load(uri).into(profileImg);
                     else

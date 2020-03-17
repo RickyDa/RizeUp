@@ -154,7 +154,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if (dataSnapshot.hasChild(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG)) {
-                if(!dataSnapshot.child(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).getValue().equals(id))
+                if(!Objects.equals(dataSnapshot.child(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).getValue(), id))
                     Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
                 startQueueActivity();
             } else {

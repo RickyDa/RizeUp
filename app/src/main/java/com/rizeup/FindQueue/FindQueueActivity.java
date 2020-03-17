@@ -1,16 +1,13 @@
 package com.rizeup.FindQueue;
 
+import android.app.ProgressDialog;
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.ProgressDialog;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,8 +15,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.R;
+import com.rizeup.models.RiZeUpQueue;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
@@ -29,7 +26,6 @@ public class FindQueueActivity extends AppCompatActivity implements ValueEventLi
     public static final String QID_EXTRA = "qid";
 
     private RecyclerView queueListRecyclerView;
-    private QueueListRecyclerViewAdapter qListAdapter;
     private ArrayList<RiZeUpQueue> qList;
     private ProgressDialog loading;
 
@@ -62,7 +58,7 @@ public class FindQueueActivity extends AppCompatActivity implements ValueEventLi
             if(!qList.contains(q))
                 qList.add(q);
         }
-        qListAdapter = new QueueListRecyclerViewAdapter(FindQueueActivity.this, qList);
+        QueueListRecyclerViewAdapter qListAdapter = new QueueListRecyclerViewAdapter(FindQueueActivity.this, qList);
         queueListRecyclerView.setAdapter(qListAdapter);
     }
 

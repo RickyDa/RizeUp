@@ -1,5 +1,6 @@
 package com.rizeup.Queue;
 
+import android.annotation.SuppressLint;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.rizeup.RiZeUpActivity;
 import com.rizeup.models.QueueParticipant;
 import com.rizeup.models.RiZeUpQueue;
 
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+@SuppressLint("Registered")
 public class RiZeUpQueueActivity extends AppCompatActivity {
 
     protected DatabaseReference queueRef;
