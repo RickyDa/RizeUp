@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:id="@+id/userQueue_layout"
     tools:context=".Queue.QueueActivity">
 
     <LinearLayout
@@ -26,15 +26,20 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:gravity="center"
+            android:textColor="#fff"
             android:text="Queue name"
             android:textSize="40sp" />
-
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:padding="10dp">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userQueue_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

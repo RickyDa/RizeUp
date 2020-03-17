@@ -55,8 +55,8 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
                 final RiZeUpUser user = dataSnapshot.getValue(RiZeUpUser.class);
                 holder.participantName.setText(user.getName());
                 holder.participantNumber.setText(String.valueOf(position));
-                if (user.getImageUri() == null) {
-                    holder.image.setImageResource(R.drawable.defaultimage);
+                if (user.getImageUri().trim().equals("")) {
+                    Glide.with(mContext).asBitmap().load(R.drawable.defaultimage).into(holder.image);
                 } else {
                     Glide.with(mContext).asBitmap().load(user.getImageUri()).into(holder.image);
                 }

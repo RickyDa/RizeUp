@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +28,6 @@ public class FindQueueActivity extends AppCompatActivity {
     private RecyclerView queueListRecyclerView;
     private QueueListRecyclerViewAdapter qListAdapter;
     private ArrayList<RiZeUpQueue> qList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

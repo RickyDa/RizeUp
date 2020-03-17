@@ -1,8 +1,10 @@
 package com.rizeup.Queue;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,6 +26,7 @@ public class QueueActivity extends RiZeUpQueueActivity {
         setContentView(R.layout.activity_queue);
         Intent intent = getIntent();
         String queueId = intent.getStringExtra(FindQueueActivity.QID_EXTRA);
+
 
         this.loaded = false;
         this.participants = new ArrayList<>();
