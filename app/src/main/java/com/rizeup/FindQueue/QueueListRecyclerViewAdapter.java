@@ -57,8 +57,10 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         holder.queueName.setText(q.getName());
         holder.queueOwner.setText(q.getOwnerName());
         holder.id = q.getOwnerUid();
-        if (!(q.getImageUrl().trim().equals("")))
+
+        if (!(q.getImageUrl().trim().equals(""))) {
             Glide.with(mContext).asBitmap().load(queues.get(position).getImageUrl()).into(holder.queueImage);
+        }
 
         holder.qRef = holder.qRef.child(q.getOwnerUid() + "/" + FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
         holder.qRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -94,7 +96,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
         return queues.size();
     }
 
-    public static class QueueHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class QueueHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ValueEventListener {
 
         CircleImageView queueImage;
         TextView queueName;
@@ -124,23 +126,7 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
 
         @Override
         public void onClick(View v) {
-            this.userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChild(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG)) {
-                        if(!dataSnapshot.child(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).getValue().equals(id))
-                            Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
-                        startQueueActivity();
-                    } else {
-                        registerUser();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+            this.userRef.addListenerForSingleValueEvent(this);
         }
 
         private void registerUser() {
@@ -163,6 +149,22 @@ public class QueueListRecyclerViewAdapter extends RecyclerView.Adapter<QueueList
             Intent intent = new Intent(context, QueueActivity.class);
             intent.putExtra(FindQueueActivity.QID_EXTRA, id);
             context.startActivity(intent);
+        }
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.hasChild(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG)) {
+                if(!dataSnapshot.child(FirebaseReferences.REAL_TIME_RIZE_UP_USER_REG).getValue().equals(id))
+                    Toast.makeText(context, "REGISTRATION DENIED: Your'e already REGISTERED to a queue", Toast.LENGTH_SHORT).show();
+                startQueueActivity();
+            } else {
+                registerUser();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
         }
     }
 }
