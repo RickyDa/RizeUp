@@ -8,4 +8,5 @@
     <color name="colorGray200">#e4e4e4</color>
     <color name="colorGreenAndroid">#075E61</color>
     <color name="colorWhitePurple">#d4d1fa</color>
+    <color name="colorDarkTransparent">#80000000</color>
 </resources>

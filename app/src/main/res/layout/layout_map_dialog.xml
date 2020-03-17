@@ -2,32 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:background="@android:color/transparent"
+    android:layout_gravity="center"
     android:layout_margin="40dp"
-    android:layout_gravity="center">
-
+    android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="40dp">
 
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:background="@color/colorAccent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        >
+        android:background="@drawable/map_dialog_border"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/map_queue_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:gravity="center"
             android:layout_marginTop="50dp"
-        />
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <fragment
             android:id="@+id/map_container"
             class="com.google.android.gms.maps.SupportMapFragment"
@@ -35,25 +35,31 @@
             android:layout_height="0dp"
             android:layout_margin="10dp"
             android:layout_weight="1" />
+
         <Button
             android:id="@+id/map_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/button_map"
             android:text="@string/back"
-            android:layout_marginBottom="10dp"
             android:textColor="@android:color/white"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/map_queue_images"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:src='@drawable/queueimg'
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"/>
-    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/map_dialog_image_border"
+        android:padding="1dp"
+        android:layout_centerHorizontal="true">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/map_queue_images"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src='@drawable/queueimg' />
+    </LinearLayout>
 
 </RelativeLayout>
 

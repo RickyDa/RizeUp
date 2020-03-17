@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -64,10 +68,10 @@ public class MapDialog extends AppCompatDialogFragment implements OnMapReadyCall
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
-            userLoc = new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
-            if(userMarker == null){
+            userLoc = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            if (userMarker == null) {
                 userMarker = mMap.addMarker(new MarkerOptions().position(userLoc).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-            }else{
+            } else {
                 userMarker.setPosition(userLoc);
             }
         }
@@ -84,7 +88,7 @@ public class MapDialog extends AppCompatDialogFragment implements OnMapReadyCall
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_map_dialog, null);
@@ -116,7 +120,16 @@ public class MapDialog extends AppCompatDialogFragment implements OnMapReadyCall
 
         mapFragment.getMapAsync(this);
         getLastLocation();
-        return builder.create();
+        Dialog dialog = builder.create();
+        Window window = dialog.getWindow();
+
+        if (window != null) {
+            window.requestFeature(Window.FEATURE_NO_TITLE);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            setStyle(DialogFragment.STYLE_NO_FRAME, android.R.style.Theme);
+        }
+
+        return dialog;
     }
 
     @Override
@@ -126,6 +139,14 @@ public class MapDialog extends AppCompatDialogFragment implements OnMapReadyCall
         this.mMap.addMarker(new MarkerOptions().position(queuePos).title(name));
         this.mMap.moveCamera(CameraUpdateFactory.newLatLng(queuePos));
         this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(queuePos, 17.0f));
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//
+//        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        setStyle(DialogFragment.STYLE_NO_FRAME, android.R.style.Theme);
     }
 
     @Override
@@ -189,7 +210,7 @@ public class MapDialog extends AppCompatDialogFragment implements OnMapReadyCall
                                     userLoc = new LatLng(location.getLatitude(), location.getLongitude());
                                     userMarker = mMap.addMarker(new MarkerOptions().position(userLoc).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                                 }
-                                    requestNewLocationData();
+                                requestNewLocationData();
                             }
                         }
                 );
