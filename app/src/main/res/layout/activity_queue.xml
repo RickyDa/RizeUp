@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userQueue_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/userQueue_layout"
     tools:context=".Queue.QueueActivity">
 
     <LinearLayout
@@ -27,20 +27,21 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:gravity="center"
-
-            android:text="Queue name"
             android:textSize="40sp" />
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border"
-        android:padding="10dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userQueue_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
-    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userQueue_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -50,8 +51,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="15dp"
-        app:tint="@android:color/white"
         android:backgroundTint="@android:color/holo_blue_light"
-        android:src="@drawable/ic_my_location" />
+        android:src="@drawable/ic_my_location"
+        app:tint="@android:color/white" />
 
 </RelativeLayout>

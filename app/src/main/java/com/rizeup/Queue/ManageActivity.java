@@ -3,19 +3,15 @@ package com.rizeup.Queue;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +28,7 @@ import com.rizeup.R;
 import com.rizeup.utils.FirebaseReferences;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ManageActivity extends RiZeUpQueueActivity {
 
@@ -51,7 +48,7 @@ public class ManageActivity extends RiZeUpQueueActivity {
         this.participants = new ArrayList<>();
         this.queueRecyclerView = findViewById(R.id.manage_queueRecyclerView);
         this.loaded = false;
-        this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        this.queueRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_QUEUES).child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         this.usersRef = FirebaseDatabase.getInstance().getReference(FirebaseReferences.REAL_TIME_DATABASE_USERS);
         this.participantsRef = queueRef.child(FirebaseReferences.REAL_TIME_DATABASE_PARTICIPANTS);
 
