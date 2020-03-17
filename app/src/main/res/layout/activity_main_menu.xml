@@ -136,7 +136,7 @@
                     android:id="@+id/mainMenu_queueName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#fff"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp" />
 
                 <TextView
@@ -144,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mainMenu_queueName"
-                    android:textColor="#E8E8E8" />
+                    android:textColor="@color/colorWhiteGray" />
 
             </RelativeLayout>
 

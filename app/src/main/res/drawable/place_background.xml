@@ -9,6 +9,6 @@
         android:height="60dp"
         />
     <solid
-        android:color="#ffffff"
+        android:color="@android:color/white"
         />
 </shape>

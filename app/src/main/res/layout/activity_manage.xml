@@ -38,7 +38,7 @@
                 android:layout_margin="5dp"
                 android:gravity="start"
                 android:text="@string/queue_name"
-                android:textColor="#fff"
+                android:textColor="@android:color/white"
                 android:textSize="40sp" />
 
         </LinearLayout>
@@ -87,7 +87,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:text="@string/rename"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -98,7 +98,7 @@
                 android:src="@drawable/ic_mode_edit"
                 app:fabSize="mini"
                 app:backgroundTint="@android:color/holo_red_light"
-                app:tint="#ffff" />
+                app:tint="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,7 +112,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:text="@string/delete"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -123,7 +123,7 @@
                 android:src="@android:drawable/ic_delete"
                 app:fabSize="mini"
                 app:backgroundTint="@android:color/black"
-                app:tint="#ffff" />
+                app:tint="@android:color/white" />
 
 
         </LinearLayout>
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:src="@drawable/ic_settings_24dp"
-            app:tint="#ffff" />
+            app:tint="@android:color/white" />
     </LinearLayout>
 
 </RelativeLayout>
