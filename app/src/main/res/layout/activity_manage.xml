@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:gravity="left"
+                android:gravity="start"
                 android:text="@string/queue_name"
                 android:textColor="#fff"
                 android:textSize="40sp" />
