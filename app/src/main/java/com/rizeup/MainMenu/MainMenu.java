@@ -201,6 +201,7 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
         this.queueImage.setVisibility(View.INVISIBLE);
         this.queueName.setText("");
         this.queueOwner.setText("");
+        this.registeredQueueCard.setVisibility(View.INVISIBLE);
         this.userPlace.setVisibility(View.INVISIBLE);
     }
 
