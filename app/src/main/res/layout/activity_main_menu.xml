@@ -113,6 +113,7 @@
         <LinearLayout
             android:id="@+id/mainMenu_registeredQueue"
             android:layout_width="match_parent"
+            android:visibility="invisible"
             android:layout_height="wrap_content"
             android:background="@drawable/active_queue_background">
 

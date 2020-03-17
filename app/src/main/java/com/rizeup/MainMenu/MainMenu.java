@@ -143,6 +143,7 @@ public class MainMenu extends AppCompatActivity implements ChildEventListener {
                 RiZeUpUser user = dataSnapshot.getValue(RiZeUpUser.class);
                 if (user != null && user.getRegisteredQ() != null) {
                     registeredQueueCard.setClickable(true);
+                    registeredQueueCard.setVisibility(View.VISIBLE);
                     queue.child(user.getRegisteredQ()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
